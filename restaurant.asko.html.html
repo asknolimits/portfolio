@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Noir — Fine Dining Experience</title>
+  <meta name="description" content="Maison Noir offers an unparalleled fine dining experience with expertly crafted dishes and an intimate atmosphere in the heart of the city." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            elegant: ['Cormorant Garamond', 'Georgia', 'serif'],
+          },
+          colors: {
+            gold: {
+              300: '#f5d98b',
+              400: '#e8c35a',
+              500: '#c9a84c',
+              600: '#a07830',
+            },
+            dark: {
+              900: '#0a0a0a',
+              800: '#111111',
+              700: '#1a1a1a',
+              600: '#222222',
+              500: '#2e2e2e',
+            }
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.8s ease forwards',
+            'fade-in': 'fadeIn 1s ease forwards',
+            'slide-left': 'slideLeft 0.8s ease forwards',
+            'slide-right': 'slideRight 0.8s ease forwards',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(40px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideLeft: {
+              '0%': { opacity: '0', transform: 'translateX(60px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' },
+            },
+            slideRight: {
+              '0%': { opacity: '0', transform: 'translateX(-60px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' },
+            },
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c35a;
+      --dark: #0a0a0a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: #0a0a0a;
+      color: #f5f0e8;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* Cursor dot */
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      top: 0; left: 0;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.15s ease;
+      top: 0; left: 0;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      transition: all 0.4s ease;
+      padding: 24px 0;
+    }
+    .navbar.scrolled {
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 14px 0;
+    }
+    .nav-link {
+      position: relative;
+      color: rgba(245,240,232,0.75);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+      text-decoration: none;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover { color: var(--gold-light); }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Gold divider */
+    .gold-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+
+    /* Section reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Hero */
+    .hero-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.6) 60%, rgba(10,10,10,1) 100%),
+        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=85&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* Menu card */
+    .menu-card {
+      background: #111;
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      transition: border-color 0.4s ease, transform 0.4s ease;
+      cursor: pointer;
+    }
+    .menu-card:hover {
+      border-color: rgba(201,168,76,0.5);
+      transform: translateY(-6px);
+    }
+    .menu-card img {
+      transition: transform 0.6s ease;
+    }
+    .menu-card:hover img {
+      transform: scale(1.07);
+    }
+
+    /* Price tag */
+    .price-tag {
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+    }
+
+    /* Gallery */
+    .gallery-item {
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      transition: transform 0.6s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    /* Section badge */
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-badge::before,
+    .section-badge::after {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(201,168,76,0.02));
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 2px;
+      transition: border-color 0.3s ease;
+    }
+    .testimonial-card:hover {
+      border-color: rgba(201,168,76,0.35);
+    }
+
+    /* Form inputs */
+    .form-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 1px;
+      color: #f5f0e8;
+      outline: none;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      width: 100%;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+    .form-input:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.05);
+    }
+    .form-input::placeholder { color: rgba(245,240,232,0.35); }
+
+    /* Buttons */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.35s ease;
+      z-index: 0;
+    }
+    .btn-gold:hover { color: #0a0a0a; }
+    .btn-gold:hover::before { transform: translateX(0); }
+    .btn-gold span { position: relative; z-index: 1; }
+
+    .btn-gold-solid {
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      color: #0a0a0a;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-gold-solid:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-light);
+    }
+
+    /* Stats counter */
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Quote mark */
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.25;
+      position: absolute;
+      top: -10px;
+      left: 20px;
+    }
+
+    /* Stars */
+    .stars { color: var(--gold); letter-spacing: 2px; }
+
+    /* Opening hours table */
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+    }
+    .hours-row:last-child { border-bottom: none; }
+
+    /* Menu tabs */
+    .menu-tab {
+      padding: 10px 24px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+    .menu-tab.active, .menu-tab:hover {
+      color: var(--gold);
+      border-color: rgba(201,168,76,0.3);
+    }
+
+    /* Parallax image */
+    .parallax-img {
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Mobile nav */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.98);
+      backdrop-filter: blur(30px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-nav-link {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: rgba(245,240,232,0.8);
+      transition: color 0.3s ease;
+      text-decoration: none;
+    }
+    .mobile-nav-link:hover { color: var(--gold); }
+
+    /* Hamburger */
+    .hamburger { cursor: pointer; padding: 8px; }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 1px;
+      background: #f5f0e8;
+      margin: 6px 0;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Reservation section */
+    .reservation-bg {
+      background-image:
+        linear-gradient(to right, rgba(10,10,10,0.97) 45%, rgba(10,10,10,0.75) 100%),
+        url('https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1400&q=80&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Chef section */
+    .chef-img-wrap {
+      position: relative;
+    }
+    .chef-img-wrap::before {
+      content: '';
+      position: absolute;
+      top: 20px; left: 20px;
+      right: -20px; bottom: -20px;
+      border: 1px solid rgba(201,168,76,0.25);
+      z-index: 0;
+    }
+    .chef-img-wrap img {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: #f5f0e8;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    /* Scroll progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      z-index: 1001;
+      transition: width 0.1s linear;
+    }
+
+    /* Footer */
+    footer a {
+      color: rgba(245,240,232,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover { color: var(--gold); }
+
+    /* Back to top */
+    .back-top {
+      position: fixed;
+      bottom: 36px; right: 36px;
+      width: 48px; height: 48px;
+      border: 1px solid rgba(201,168,76,0.4);
+      background: rgba(10,10,10,0.8);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+    .back-top.show { opacity: 1; pointer-events: auto; }
+    .back-top:hover { background: var(--gold); border-color: var(--gold); }
+    .back-top svg { width: 16px; height: 16px; stroke: var(--gold); transition: stroke 0.3s ease; }
+    .back-top:hover svg { stroke: #0a0a0a; }
+
+    /* Noise overlay */
+    .noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      .cursor-dot, .cursor-ring { display: none; }
+      .hero-bg { background-attachment: scroll; }
+      .parallax-img { background-attachment: scroll; }
+      .chef-img-wrap::before { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Back to top -->
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">About</a>
+    <a href="#menu" class="mobile-nav-link" onclick="closeMobileMenu()">Menu</a>
+    <a href="#chef" class="mobile-nav-link" onclick="closeMobileMenu()">Our Chef</a>
+    <a href="#gallery" class="mobile-nav-link" onclick="closeMobileMenu()">Gallery</a>
+    <a href="#testimonials" class="mobile-nav-link" onclick="closeMobileMenu()">Reviews</a>
+    <a href="#reservation" class="mobile-nav-link" onclick="closeMobileMenu()">Reserve</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex flex-col leading-none">
+        <span style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:#f5f0e8; letter-spacing:0.04em;">MAISON</span>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:0.85rem; font-weight:300; color:var(--gold); letter-spacing:0.35em; text-transform:uppercase;">Noir</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-10">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#menu" class="nav-link">Menu</a>
+        <a href="#chef" class="nav-link">Our Chef</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#testimonials" class="nav-link">Reviews</a>
+      </div>
+
+      <!-- CTA + hamburger -->
+      <div class="flex items-center gap-6">
+        <a href="#reservation" class="hidden md:inline-flex btn-gold">
+          <span>Reserve a Table</span>
+        </a>
+        <button class="hamburger md:hidden" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero-bg relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <div class="reveal" style="transition-delay:0.1s">
+        <span class="section-badge mb-8 inline-flex">Est. 2009</span>
+      </div>
+      <h1 class="reveal" style="font-family:'Playfair Display',serif; font-size:clamp(3.5rem,8vw,6.5rem); font-weight:700; line-height:1.05; color:#f5f0e8; transition-delay:0.25s;">
+        Where Every <em style="font-style:italic; color:var(--gold-light);">Bite</em><br>Tells a Story
+      </h1>
+      <p class="reveal mt-6 text-lg" style="color:rgba(245,240,232,0.65); font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:300; letter-spacing:0.02em; max-width:560px; margin-left:auto; margin-right:auto; transition-delay:0.4s;">
+        An intimate fine dining experience crafted with seasonal ingredients, artistry, and soul.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-5 mt-10" style="transition-delay:0.55s;">
+        <a href="#reservation" class="btn-gold-solid">
+          <span>Reserve Your Table</span>
+        </a>
+        <a href="#menu" class="btn-gold">
+          <span>Explore Menu</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 reveal" style="transition-delay:0.8s">
+      <span style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,240,232,0.4);">Scroll</span>
+      <div style="width:1px; height:50px; background:linear-gradient(to bottom, var(--gold), transparent); animation: pulse 2s ease-in-out infinite;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== STATS BAR ==================== -->
+  <section style="background:#111; border-top:1px solid rgba(201,168,76,0.1); border-bottom:1px solid rgba(201,168,76,0.1);">
+    <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="reveal">
+        <div class="stat-number">15+</div>
+        <div style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,240,232,0.45); margin-top:8px;">Years of Excellence</div>
+      </div>
+      <div class="reveal" style="transition-delay:0.15s">
+        <div class="stat-number">3</div>
+        <div style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,240,232,0.45); margin-top:8px;">Michelin Stars</div>
+      </div>
+      <div class="reveal" style="transition-delay:0.3s">
+        <div class="stat-number">120K+</div>
+        <div style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,240,232,0.45); margin-top:8px;">Happy Guests</div>
+      </div>
+      <div class="reveal" style="transition-delay:0.45s">
+        <div class="stat-number">48</div>
+        <div style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,240,232,0.45); margin-top:8px;">Signature Dishes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section id="about" class="py-28 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+      <!-- Images collage -->
+      <div class="reveal-left relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div style="height:320px; overflow:hidden; border-radius:2px;">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80&auto=format&fit=crop" alt="Restaurant interior" style="width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="height:320px; overflow:hidden; border-radius:2px; margin-top:40px;">
+            <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=600&q=80&auto=format&fit=crop" alt="Fine dining table" style="width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+        </div>
+        <!-- Gold frame accent -->
+        <div style="position:absolute; bottom:-20px; left:-20px; width:80px; height:80px; border-left:2px solid var(--gold); border-bottom:2px solid var(--gold);"></div>
+      </div>
+
+      <!-- Text -->
+      <div class="reveal-right">
+        <span class="section-badge mb-5">Our Story</span>
+        <h2 class="section-title mt-4 mb-6">
+          A Culinary Journey<br>Born from <em>Passion</em>
+        </h2>
+        <p style="color:rgba(245,240,232,0.6); line-height:1.9; font-size:0.97rem; margin-bottom:20px;">
+          Maison Noir was born from a simple belief: that exceptional food has the power to create unforgettable memories. Since 2009, we have been crafting experiences that transcend the ordinary — where each plate is a canvas and each meal is a story.
+        </p>
+        <p style="color:rgba(245,240,232,0.6); line-height:1.9; font-size:0.97rem; margin-bottom:36px;">
+          Nestled in the heart of the city, our intimate dining room seats just 42 guests — ensuring that every visit receives the attention and care it deserves. We source only the finest seasonal ingredients from local farms and trusted purveyors.
+        </p>
+
+        <div class="grid grid-cols-2 gap-6 mb-10">
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:'Playfair Display',serif; font-size:1.05rem; color:#f5f0e8; margin-bottom:4px;">Farm to Table</div>
+            <div style="font-size:0.82rem; color:rgba(245,240,232,0.45);">100% seasonal, local sourcing</div>
+          </div>
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:'Playfair Display',serif; font-size:1.05rem; color:#f5f0e8; margin-bottom:4px;">Curated Wine</div>
+            <div style="font-size:0.82rem; color:rgba(245,240,232,0.45);">500+ labels worldwide</div>
+          </div>
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:'Playfair Display',serif; font-size:1.05rem; color:#f5f0e8; margin-bottom:4px;">Private Events</div>
+            <div style="font-size:0.82rem; color:rgba(245,240,232,0.45);">Bespoke dining experiences</div>
+          </div>
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:'Playfair Display',serif; font-size:1.05rem; color:#f5f0e8; margin-bottom:4px;">Tasting Menus</div>
+            <div style="font-size:0.82rem; color:rgba(245,240,232,0.45);">7 & 12 course journeys</div>
+          </div>
+        </div>
+
+        <a href="#reservation" class="btn-gold">
+          <span>Discover Our Story</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MENU ==================== -->
+  <section id="menu" style="background:#080808; padding:7rem 1.5rem;">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="section-badge mb-5">Curated Selection</span>
+        <h2 class="section-title mt-4 mb-5">
+          The Art of <em>Fine Cuisine</em>
+        </h2>
+        <p style="color:rgba(245,240,232,0.5); max-width:520px; margin:0 auto; line-height:1.8; font-size:0.95rem;">
+          Each dish is a masterpiece composed of the finest seasonal ingredients, crafted with precision and passion.
+        </p>
+
+        <!-- Tabs -->
+        <div class="flex items-center justify-center flex-wrap gap-2 mt-10">
+          <button class="menu-tab active" onclick="filterMenu('all', this)">All</button>
+          <button class="menu-tab" onclick="filterMenu('starters', this)">Starters</button>
+          <button class="menu-tab" onclick="filterMenu('mains', this)">Mains</button>
+          <button class="menu-tab" onclick="filterMenu('desserts', this)">Desserts</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="menuGrid">
+
+        <!-- Starter 1 -->
+        <div class="menu-card reveal" data-cat="starters">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1626200926749-ccf35e33b31e?w=600&q=80&auto=format&fit=crop" alt="Truffle Burrata" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Starter</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Truffle Burrata</h3>
+              </div>
+              <span class="price-tag">$24</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Fresh burrata with black truffle shavings, heirloom tomatoes, and aged balsamic reduction.</p>
+          </div>
+        </div>
+
+        <!-- Starter 2 -->
+        <div class="menu-card reveal" data-cat="starters" style="transition-delay:0.1s">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1623855244183-52fd8d3ce2f7?w=600&q=80&auto=format&fit=crop" alt="Oysters Rockefeller" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Starter</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Oysters Rockefeller</h3>
+              </div>
+              <span class="price-tag">$32</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Freshly shucked oysters with champagne mignonette and wilted spinach gratin.</p>
+          </div>
+        </div>
+
+        <!-- Main 1 -->
+        <div class="menu-card reveal" data-cat="mains" style="transition-delay:0.2s">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80&auto=format&fit=crop" alt="Wagyu Tenderloin" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Main Course</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Wagyu Tenderloin A5</h3>
+              </div>
+              <span class="price-tag">$185</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Japanese A5 Wagyu, roasted bone marrow butter, pommes dauphine, and périgueux sauce.</p>
+          </div>
+        </div>
+
+        <!-- Main 2 -->
+        <div class="menu-card reveal" data-cat="mains" style="transition-delay:0.1s">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&q=80&auto=format&fit=crop" alt="Lobster Thermidor" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Main Course</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Lobster Thermidor</h3>
+              </div>
+              <span class="price-tag">$145</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Maine lobster, cognac cream sauce, gruyère gratin, and saffron risotto.</p>
+          </div>
+        </div>
+
+        <!-- Dessert 1 -->
+        <div class="menu-card reveal" data-cat="desserts" style="transition-delay:0.2s">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80&auto=format&fit=crop" alt="Chocolate Sphere" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Dessert</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Dark Chocolate Sphere</h3>
+              </div>
+              <span class="price-tag">$28</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Valrhona 72% chocolate shell, salted caramel mousse, and warm raspberry coulis.</p>
+          </div>
+        </div>
+
+        <!-- Dessert 2 -->
+        <div class="menu-card reveal" data-cat="desserts" style="transition-delay:0.1s">
+          <div style="height:240px; overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80&auto=format&fit=crop" alt="Crème Brûlée" style="width:100%; height:100%; object-fit:cover;"/>
+          </div>
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <div>
+                <div style="font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Dessert</div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:#f5f0e8;">Tahitian Crème Brûlée</h3>
+              </div>
+              <span class="price-tag">$22</span>
+            </div>
+            <p style="font-size:0.82rem; color:rgba(245,240,232,0.45); line-height:1.7; margin-top:8px;">Classic vanilla crème brûlée with fresh passion fruit and spun sugar decoration.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-14 reveal">
+        <a href="#reservation" class="btn-gold">
+          <span>View Full Menu</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PARALLAX STRIP ==================== -->
+  <div class="parallax-img relative" style="height:420px; background-image:linear-gradient(to right, rgba(10,10,10,0.7), rgba(10,10,10,0.3)), url('https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=1600&q=80&auto=format&fit=crop');">
+    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:2rem;">
+      <div class="reveal">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,4vw,2.5rem); font-weight:300; font-style:italic; color:#f5f0e8; max-width:700px; line-height:1.5;">
+          "Cooking is not about convenience. It is about love — love for the ingredients, love for the craft, and above all, love for the people who sit at your table."
+        </p>
+        <p style="margin-top:20px; font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold);">— Chef Alexandre Moreau</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHEF ==================== -->
+  <section id="chef" class="py-28 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+      <!-- Text -->
+      <div class="reveal-left order-2 md:order-1">
+        <span class="section-badge mb-5">Behind the Craft</span>
+        <h2 class="section-title mt-4 mb-6">
+          Meet Chef<br><em>Alexandre Moreau</em>
+        </h2>
+        <p style="color:rgba(245,240,232,0.6); line-height:1.9; font-size:0.97rem; margin-bottom:20px;">
+          Born in Lyon and trained at Le Cordon Bleu Paris, Chef Moreau brings over 22 years of culinary mastery to every plate. His philosophy merges classical French technique with the bold, unexpected flavors of global cuisine.
+        </p>
+        <p style="color:rgba(245,240,232,0.6); line-height:1.9; font-size:0.97rem; margin-bottom:36px;">
+          Before founding Maison Noir, Alexandre held the helm at three Michelin-starred establishments across Paris, New York, and Tokyo — each experience leaving its mark on his distinctive, evocative style.
+        </p>
+
+        <div class="flex gap-8 mb-10">
+          <div style="text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:700; color:var(--gold); line-height:1;">22+</div>
+            <div style="font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-top:4px;">Years Experience</div>
+          </div>
+          <div style="width:1px; background:rgba(201,168,76,0.2);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:700; color:var(--gold); line-height:1;">3</div>
+            <div style="font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-top:4px;">Michelin Stars</div>
+          </div>
+          <div style="width:1px; background:rgba(201,168,76,0.2);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:700; color:var(--gold); line-height:1;">5</div>
+            <div style="font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-top:4px;">Countries</div>
+          </div>
+        </div>
+
+        <a href="#reservation" class="btn-gold">
+          <span>Chef's Tasting Menu</span>
+        </a>
+      </div>
+
+      <!-- Image -->
+      <div class="chef-img-wrap reveal-right order-1 md:order-2">
+        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700&q=80&auto=format&fit=crop" alt="Chef Alexandre Moreau" style="width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:2px;"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GALLERY ==================== -->
+  <section id="gallery" style="background:#060606; padding:7rem 1.5rem;">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="section-badge mb-5">Visual Feast</span>
+        <h2 class="section-title mt-4">
+          A Glimpse of <em>Our World</em>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 reveal">
+        <div class="gallery-item relative" style="height:280px; border-radius:2px; grid-row:span 2;">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80&auto=format&fit=crop" alt="Food" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px;">
+          <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80&auto=format&fit=crop" alt="Dish" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px;">
+          <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=600&q=80&auto=format&fit=crop" alt="Restaurant" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px; grid-row:span 2;">
+          <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=600&q=80&auto=format&fit=crop" alt="Food" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px;">
+          <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80&auto=format&fit=crop" alt="Dessert" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px;">
+          <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80&auto=format&fit=crop" alt="Salad" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item relative" style="height:280px; border-radius:2px; grid-column:span 2;">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&auto=format&fit=crop" alt="Restaurant interior" />
+          <div class="gallery-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIALS ==================== -->
+  <section id="testimonials" class="py-28 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="section-badge mb-5">Guest Stories</span>
+        <h2 class="section-title mt-4">
+          Words From Our <em>Guests</em>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="testimonial-card p-8 relative reveal">
+          <div class="quote-mark">"</div>
+          <div class="stars mb-4">★★★★★</div>
+          <p style="color:rgba(245,240,232,0.65); line-height:1.8; font-size:0.93rem; font-style:italic; margin-bottom:24px;">
+            "An evening at Maison Noir transcends dining — it is pure theatre. Every course was a revelation, and the sommelier's wine pairings were absolutely inspired."
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80&auto=format&fit=crop&crop=face" alt="James C." style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:1px solid rgba(201,168,76,0.3);"/>
+            <div>
+              <div style="font-weight:500; font-size:0.9rem; color:#f5f0e8;">James Calloway</div>
+              <div style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Food Critic, The Times</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 relative reveal" style="transition-delay:0.15s">
+          <div class="quote-mark">"</div>
+          <div class="stars mb-4">★★★★★</div>
+          <p style="color:rgba(245,240,232,0.65); line-height:1.8; font-size:0.93rem; font-style:italic; margin-bottom:24px;">
+            "We celebrated our anniversary here and it was flawless from start to finish. The wagyu was the best I have ever tasted. We will be returning very soon."
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&auto=format&fit=crop&crop=face" alt="Sarah M." style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:1px solid rgba(201,168,76,0.3);"/>
+            <div>
+              <div style="font-weight:500; font-size:0.9rem; color:#f5f0e8;">Sarah Mitchell</div>
+              <div style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Regular Guest</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 relative reveal" style="transition-delay:0.3s">
+          <div class="quote-mark">"</div>
+          <div class="stars mb-4">★★★★★</div>
+          <p style="color:rgba(245,240,232,0.65); line-height:1.8; font-size:0.93rem; font-style:italic; margin-bottom:24px;">
+            "Chef Moreau's 12-course tasting menu is one of the greatest culinary experiences in the city. Each dish tells a story, and the whole journey is breathtaking."
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80&auto=format&fit=crop&crop=face" alt="Daniel R." style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:1px solid rgba(201,168,76,0.3);"/>
+            <div>
+              <div style="font-weight:500; font-size:0.9rem; color:#f5f0e8;">Daniel Reeves</div>
+              <div style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Lifestyle Editor, Vogue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Press logos -->
+      <div class="mt-20 text-center reveal">
+        <p style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,240,232,0.3); margin-bottom:24px;">As featured in</p>
+        <div class="flex items-center justify-center flex-wrap gap-10">
+          <span style="font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic;">The New York Times</span>
+          <span style="font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic;">Vogue</span>
+          <span style="font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic;">Bon Appétit</span>
+          <span style="font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic;">Condé Nast</span>
+          <span style="font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic;">Forbes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RESERVATION ==================== -->
+  <section id="reservation" class="reservation-bg py-28 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-start">
+      <!-- Info -->
+      <div class="reveal-left">
+        <span class="section-badge mb-5">Make a Reservation</span>
+        <h2 class="section-title mt-4 mb-6">
+          Reserve Your<br><em>Experience</em>
+        </h2>
+        <p style="color:rgba(245,240,232,0.55); line-height:1.9; font-size:0.95rem; margin-bottom:36px;">
+          Join us for an unforgettable evening. For parties of 6 or more, please call us directly or email events@maisonnoir.com for private dining arrangements.
+        </p>
+
+        <!-- Hours -->
+        <div style="border:1px solid rgba(201,168,76,0.15); padding:28px; border-radius:2px; margin-bottom:28px;">
+          <h3 style="font-family:'Playfair Display',serif; font-size:1rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">Opening Hours</h3>
+          <div class="hours-row">
+            <span style="font-size:0.85rem; color:rgba(245,240,232,0.55);">Monday – Tuesday</span>
+            <span style="font-size:0.85rem; color:rgba(245,240,232,0.35);">Closed</span>
+          </div>
+          <div class="hours-row">
+            <span style="font-size:0.85rem; color:rgba(245,240,232,0.55);">Wednesday – Thursday</span>
+            <span style="font-size:0.85rem; color:#f5f0e8;">6:00 PM – 10:00 PM</span>
+          </div>
+          <div class="hours-row">
+            <span style="font-size:0.85rem; color:rgba(245,240,232,0.55);">Friday – Saturday</span>
+            <span style="font-size:0.85rem; color:#f5f0e8;">6:00 PM – 11:00 PM</span>
+          </div>
+          <div class="hours-row">
+            <span style="font-size:0.85rem; color:rgba(245,240,232,0.55);">Sunday</span>
+            <span style="font-size:0.85rem; color:#f5f0e8;">5:30 PM – 9:30 PM</span>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.06 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.37a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+            </div>
+            <span style="font-size:0.9rem; color:rgba(245,240,232,0.6);">+1 (212) 555-0182</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <span style="font-size:0.9rem; color:rgba(245,240,232,0.6);">reservations@maisonnoir.com</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span style="font-size:0.9rem; color:rgba(245,240,232,0.6);">42 West 57th Street, New York, NY 10019</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="reveal-right">
+        <form onsubmit="handleReservation(event)" style="background:rgba(10,10,10,0.7); backdrop-filter:blur(20px); border:1px solid rgba(201,168,76,0.15); padding:40px; border-radius:2px;">
+          <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; color:#f5f0e8; margin-bottom:28px;">Book a Table</h3>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">First Name</label>
+              <input type="text" class="form-input" placeholder="Alexandre" required />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Last Name</label>
+              <input type="text" class="form-input" placeholder="Moreau" required />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Email Address</label>
+            <input type="email" class="form-input" placeholder="your@email.com" required />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Date</label>
+              <input type="date" class="form-input" required />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Time</label>
+              <select class="form-input" required>
+                <option value="">Select time</option>
+                <option>6:00 PM</option>
+                <option>6:30 PM</option>
+                <option>7:00 PM</option>
+                <option>7:30 PM</option>
+                <option>8:00 PM</option>
+                <option>8:30 PM</option>
+                <option>9:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Party Size</label>
+            <select class="form-input" required>
+              <option value="">Guests</option>
+              <option>1 Guest</option>
+              <option>2 Guests</option>
+              <option>3 Guests</option>
+              <option>4 Guests</option>
+              <option>5 Guests</option>
+              <option>6+ Guests (call us)</option>
+            </select>
+          </div>
+
+          <div class="mb-6">
+            <label style="display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); margin-bottom:8px;">Special Requests</label>
+            <textarea class="form-input" rows="3" placeholder="Dietary restrictions, celebrations, preferences..." style="resize:none;"></textarea>
+          </div>
+
+          <button type="submit" class="btn-gold-solid w-full justify-center" id="submitBtn">
+            Confirm Reservation
+          </button>
+
+          <div id="formSuccess" style="display:none; margin-top:16px; padding:14px; border:1px solid rgba(201,168,76,0.3); background:rgba(201,168,76,0.08); text-align:center;">
+            <p style="font-size:0.88rem; color:var(--gold);">Thank you! We will confirm your reservation within 2 hours.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer style="background:#060606; border-top:1px solid rgba(201,168,76,0.1); padding:4rem 1.5rem 2rem;">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <div class="mb-5">
+            <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:#f5f0e8; letter-spacing:0.04em;">MAISON NOIR</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; font-weight:300; color:var(--gold); letter-spacing:0.3em; text-transform:uppercase;">Fine Dining</div>
+          </div>
+          <p style="color:rgba(245,240,232,0.4); font-size:0.87rem; line-height:1.8; max-width:320px; margin-bottom:24px;">
+            An intimate sanctuary of culinary excellence in the heart of New York City. Where every evening is a celebration.
+          </p>
+          <!-- Social -->
+          <div style="display:flex; gap:12px;">
+            <a href="#" style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.25); display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; color:rgba(245,240,232,0.4);" onmouseover="this.style.borderColor='var(--gold)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.25)'; this.style.color='rgba(245,240,232,0.4)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.25); display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; color:rgba(245,240,232,0.4);" onmouseover="this.style.borderColor='var(--gold)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.25)'; this.style.color='rgba(245,240,232,0.4)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            </a>
+            <a href="#" style="width:36px; height:36px; border:1px solid rgba(201,168,76,0.25); display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; color:rgba(245,240,232,0.4);" onmouseover="this.style.borderColor='var(--gold)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.25)'; this.style.color='rgba(245,240,232,0.4)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div>
+          <h4 style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:20px;">Explore</h4>
+          <ul style="display:flex; flex-direction:column; gap:10px; list-style:none; padding:0; margin:0;">
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#menu">Our Menu</a></li>
+            <li><a href="#chef">Meet the Chef</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#testimonials">Guest Reviews</a></li>
+            <li><a href="#reservation">Reservations</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:20px;">Contact</h4>
+          <ul style="display:flex; flex-direction:column; gap:10px; list-style:none; padding:0; margin:0;">
+            <li style="color:rgba(245,240,232,0.4); font-size:0.85rem;">42 West 57th Street</li>
+            <li style="color:rgba(245,240,232,0.4); font-size:0.85rem;">New York, NY 10019</li>
+            <li><a href="tel:+12125550182">+1 (212) 555-0182</a></li>
+            <li><a href="mailto:info@maisonnoir.com">info@maisonnoir.com</a></li>
+          </ul>
+
+          <div style="margin-top:28px;">
+            <h4 style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Newsletter</h4>
+            <div style="display:flex;">
+              <input type="email" placeholder="your@email.com" style="background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); border-right:none; padding:10px 14px; color:#f5f0e8; font-size:0.82rem; outline:none; flex:1; min-width:0;"/>
+              <button style="background:var(--gold); border:none; padding:10px 16px; cursor:pointer; font-size:0.75rem; font-weight:600; letter-spacing:0.1em; color:#0a0a0a; transition:background 0.3s ease; flex-shrink:0; white-space:nowrap;" onmouseover="this.style.background='var(--gold-light)'" onmouseout="this.style.background='var(--gold)'">Join</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div style="border-top:1px solid rgba(201,168,76,0.08); padding-top:24px; display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center;">
+        <div class="gold-divider mb-4"></div>
+        <p style="font-size:0.78rem; color:rgba(245,240,232,0.25);">© 2024 Maison Noir. All rights reserved. Crafted with passion in New York City.</p>
+        <div style="display:flex; gap:20px;">
+          <a href="#" style="font-size:0.75rem;">Privacy Policy</a>
+          <a href="#" style="font-size:0.75rem;">Terms of Service</a>
+          <a href="#" style="font-size:0.75rem;">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // Custom cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+    });
+
+    function lerp(a, b, n) { return (1 - n) * a + n * b; }
+    function animateRing() {
+      ringX = lerp(ringX, mouseX, 0.12);
+      ringY = lerp(ringY, mouseY, 0.12);
+      ring.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .menu-card, .gallery-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.style.transform += ' scale(2.5)';
+        ring.style.transform += ' scale(1.5)';
+        ring.style.borderColor = 'rgba(201,168,76,0.8)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.borderColor = 'rgba(201,168,76,0.5)';
+      });
+    });
+
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    const scrollProgress = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backTop');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+
+      // Navbar
+      scrollY > 80 ? navbar.classList.add('scrolled') : navbar.classList.remove('scrolled');
+
+      // Scroll progress
+      scrollProgress.style.width = (scrollY / docH * 100) + '%';
+
+      // Back to top
+      scrollY > 600 ? backTop.classList.add('show') : backTop.classList.remove('show');
+    });
+
+    // Intersection Observer for reveal animations
+    const observerOptions = {
+      threshold: 0.12,
+      rootMargin: '0px 0px -60px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Mobile menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const ham = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      ham.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const ham = document.getElementById('hamburger');
+      menu.classList.remove('open');
+      ham.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Menu filter
+    function filterMenu(cat, btn) {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('#menuGrid .menu-card').forEach(card => {
+        const show = cat === 'all' || card.dataset.cat === cat;
+        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        if (show) {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+          card.style.display = '';
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => { if (card.style.opacity === '0') card.style.display = 'none'; }, 400);
+        }
+      });
+    }
+
+    // Reservation form
+    function handleReservation(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const success = document.getElementById('formSuccess');
+      btn.textContent = 'Processing...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.style.display = 'none';
+        success.style.display = 'block';
+        e.target.reset();
+      }, 1800);
+    }
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const offset = 80;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Parallax on hero
+    window.addEventListener('scroll', () => {
+      const hero = document.querySelector('.hero-bg');
+      if (hero) {
+        const scrolled = window.scrollY;
+        hero.style.backgroundPositionY = `calc(center + ${scrolled * 0.3}px)`;
+      }
+    });
+
+    // Staggered animation for menu cards on load
+    document.querySelectorAll('#menuGrid .menu-card').forEach((card, i) => {
+      card.style.transitionDelay = (i * 0.1) + 's';
+    });
+  </script>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+  </style>
+</body>
+</html>
