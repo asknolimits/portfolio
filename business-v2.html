@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — Strategic Growth Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060D1F;
+  --bg2:#0A1628;
+  --bg3:#0F1E35;
+  --card:#111D33;
+  --navy:#0D2149;
+  --blue:#2563EB;
+  --blue-light:#3B82F6;
+  --accent:#C9A84C;
+  --accent2:#E8C97A;
+  --white:#F0F4FF;
+  --muted:#7A8BAA;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5rem;display:flex;justify-content:space-between;align-items:center;height:76px;border-bottom:1px solid var(--border);background:rgba(6,13,31,0.92);backdrop-filter:blur(16px);transition:all .3s}
+.nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.logo-mark span{color:var(--bg);font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700}
+.logo-text{font-size:1rem;font-weight:500;color:var(--white);letter-spacing:.06em;text-transform:uppercase}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.78rem;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.06em;text-transform:uppercase}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{font-size:.75rem;font-weight:500;padding:.65rem 1.5rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .3s;text-decoration:none;display:inline-block;letter-spacing:.06em;text-transform:uppercase}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:9rem 5rem 5rem;gap:5rem;position:relative;overflow:hidden;background:var(--bg)}
+.hero-glow1{position:absolute;top:-10%;left:-5%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,0.12) 0%,transparent 65%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:-20%;right:-5%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 65%);pointer-events:none}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-left{position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1.1rem;border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06);margin-bottom:2rem}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s ease infinite}
+.hero-tag span{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,4.5vw,4.2rem);font-weight:700;color:var(--white);line-height:1.12;margin-bottom:1.5rem}
+.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-p{font-size:.95rem;line-height:1.85;color:var(--muted);margin-bottom:2.5rem;max-width:480px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-gold{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;padding:.9rem 2rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;letter-spacing:.04em}
+.btn-gold:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-ghost{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:400;padding:.9rem 2rem;background:transparent;color:var(--muted);border:1px solid var(--border2);cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block}
+.btn-ghost:hover{border-color:var(--white);color:var(--white)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:3.5rem;padding-top:2.5rem;border-top:1px solid var(--border)}
+.hstat{padding-right:2rem;border-right:1px solid var(--border)}
+.hstat:last-child{border-right:none;padding-right:0;padding-left:2rem}
+.hstat:nth-child(2){padding:0 2rem}
+.hstat-n{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--accent);line-height:1;display:block}
+.hstat-l{font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:.3rem;display:block}
+
+/* HERO RIGHT */
+.hero-right{position:relative;z-index:1}
+.hero-img-stack{position:relative;padding-bottom:3rem;padding-right:2rem}
+.hero-img-main{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:brightness(.88) contrast(1.05)}
+.hero-img-accent{position:absolute;bottom:0;right:0;width:55%;aspect-ratio:4/3;object-fit:cover;border:4px solid var(--bg);filter:brightness(.85)}
+.hcard{position:absolute;top:2rem;left:-2.5rem;background:var(--card);border:1px solid var(--border2);padding:1.25rem 1.5rem;width:210px;z-index:2}
+.hcard-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.hcard-val{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
+.hcard-sub{font-size:.72rem;color:var(--muted);margin-top:.25rem}
+.hcard-bar{height:3px;background:var(--border);margin-top:.85rem;overflow:hidden}
+.hcard-bar-fill{height:100%;width:78%;background:var(--accent)}
+
+/* MARQUEE */
+.marquee-wrap{background:var(--accent);padding:.9rem 0;overflow:hidden;white-space:nowrap}
+.marquee-inner{display:inline-flex;gap:3rem;animation:marquee 20s linear infinite}
+.marquee-item{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bg);font-weight:500;display:flex;align-items:center;gap:1.5rem}
+.marquee-item::after{content:'◆';font-size:.45rem;color:rgba(6,13,31,.4)}
+
+/* SECTION BASE */
+section{padding:6rem 5rem}
+.sec-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}
+.sec-label::before{content:'';display:block;width:20px;height:2px;background:var(--accent)}
+.sec-h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.2vw,2.8rem);font-weight:700;color:var(--white);line-height:1.2;margin-bottom:1rem}
+.sec-h2 em{font-style:italic;color:var(--accent)}
+.sec-sub{font-size:.92rem;color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:3rem}
+
+/* SERVICES */
+.services-section{background:var(--bg2)}
+.services-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:2rem}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.scard{background:var(--card);padding:2.25rem;transition:all .3s;cursor:default;position:relative;overflow:hidden}
+.scard::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .35s;transform-origin:left}
+.scard:hover{background:#162038}
+.scard:hover::after{transform:scaleX(1)}
+.scard-icon{width:44px;height:44px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem}
+.scard-num{font-family:'Playfair Display',serif;font-size:.75rem;color:var(--muted);margin-bottom:.6rem;letter-spacing:.1em}
+.scard-title{font-size:1rem;font-weight:500;color:var(--white);margin-bottom:.75rem}
+.scard-text{font-size:.82rem;color:var(--muted);line-height:1.72}
+.scard-arrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--accent);margin-top:1.25rem;transition:gap .2s}
+.scard:hover .scard-arrow{gap:.7rem}
+
+/* ABOUT / PROCESS */
+.process-section{background:var(--bg)}
+.process-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;max-width:1300px;margin:0 auto}
+.process-imgs{position:relative;padding-bottom:3rem;padding-left:2rem}
+.pimg-main{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:brightness(.85) contrast(1.05)}
+.pimg-card{position:absolute;bottom:0;left:0;background:var(--accent);padding:1.5rem;width:55%;z-index:2}
+.pimg-card-n{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--bg);line-height:1}
+.pimg-card-l{font-size:.68rem;color:rgba(6,13,31,.7);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem}
+.pimg-badge{position:absolute;top:2rem;right:-2rem;background:var(--card);border:1px solid var(--border2);padding:1.25rem;width:170px;z-index:2}
+.pimg-badge-title{font-size:.72rem;font-weight:500;color:var(--white);margin-bottom:.25rem}
+.pimg-badge-sub{font-size:.65rem;color:var(--muted)}
+.process-steps{display:flex;flex-direction:column;gap:0;margin-top:2.5rem}
+.pstep{display:flex;gap:1.25rem;align-items:flex-start;padding:1.5rem 0;border-bottom:1px solid var(--border)}
+.pstep:last-child{border-bottom:none}
+.pstep-num{width:38px;height:38px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+.pstep:hover .pstep-num{background:var(--accent);border-color:var(--accent)}
+.pstep-num span{font-family:'Playfair Display',serif;font-size:.88rem;font-weight:700;color:var(--accent);transition:color .3s}
+.pstep:hover .pstep-num span{color:var(--bg)}
+.pstep-title{font-size:.95rem;font-weight:500;color:var(--white);margin-bottom:.3rem}
+.pstep-text{font-size:.82rem;color:var(--muted);line-height:1.65}
+
+/* RESULTS */
+.results-section{background:var(--bg2);padding:6rem 5rem}
+.results-inner{display:grid;grid-template-columns:1fr 2fr;gap:5rem;align-items:center;max-width:1300px;margin:0 auto}
+.results-nums{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.rnum{background:var(--card);padding:2rem;transition:background .3s}
+.rnum:hover{background:#162038}
+.rnum-n{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--accent);line-height:1;display:block;margin-bottom:.4rem}
+.rnum-title{font-size:.88rem;font-weight:500;color:var(--white);margin-bottom:.35rem}
+.rnum-text{font-size:.76rem;color:var(--muted);line-height:1.6}
+
+/* TEAM */
+.team-section{background:var(--bg)}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:3rem}
+.tmember{background:var(--card);overflow:hidden;position:relative;cursor:default}
+.tmember-img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;display:block;filter:brightness(.75) grayscale(.3);transition:all .5s}
+.tmember:hover .tmember-img{filter:brightness(.5) grayscale(.5);transform:scale(1.04)}
+.tmember-info{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(to top,rgba(6,13,31,.95) 0%,transparent 100%);transform:translateY(30%);transition:transform .35s}
+.tmember:hover .tmember-info{transform:translateY(0)}
+.tmember-name{font-size:.95rem;font-weight:500;color:var(--white);margin-bottom:.2rem}
+.tmember-role{font-size:.72rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.tmember-bio{font-size:.75rem;color:var(--muted);line-height:1.6;margin-top:.6rem;opacity:0;transition:opacity .3s .1s}
+.tmember:hover .tmember-bio{opacity:1}
+
+/* CASE STUDIES */
+.cases-section{background:var(--bg2)}
+.cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:3rem}
+.case-item{background:var(--card);padding:2.5rem;position:relative;overflow:hidden;transition:background .3s}
+.case-item:hover{background:#162038}
+.case-tag{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem}
+.case-tag::before{content:'';display:block;width:12px;height:1px;background:var(--accent)}
+.case-h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:.75rem;line-height:1.2}
+.case-text{font-size:.83rem;color:var(--muted);line-height:1.72;margin-bottom:1.5rem}
+.case-results{display:flex;gap:2rem}
+.case-result-n{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--accent);display:block;line-height:1}
+.case-result-l{font-size:.65rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* TESTIMONIALS */
+.testimonials-section{background:var(--bg)}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:3rem}
+.tcard{background:var(--card);padding:2.25rem;transition:background .3s}
+.tcard:hover{background:#162038}
+.tcard-stars{color:var(--accent);font-size:.85rem;letter-spacing:.15em;margin-bottom:1.25rem}
+.tcard-text{font-size:.88rem;color:rgba(240,244,255,.7);line-height:1.8;margin-bottom:1.75rem;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:.85rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.tcard-avatar{width:42px;height:42px;overflow:hidden;flex-shrink:0;filter:brightness(.85)}
+.tcard-avatar img{width:100%;height:100%;object-fit:cover}
+.tcard-name{font-size:.85rem;font-weight:500;color:var(--white)}
+.tcard-role{font-size:.7rem;color:var(--muted)}
+
+/* CONTACT */
+.contact-section{background:var(--bg2)}
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;max-width:1300px;margin:0 auto}
+.contact-info p{font-size:.9rem;color:var(--muted);line-height:1.8;margin-bottom:2rem}
+.cdetails{display:flex;flex-direction:column;gap:1.25rem}
+.cdetail{display:flex;align-items:flex-start;gap:1rem}
+.cdetail-icon{width:40px;height:40px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;color:var(--accent)}
+.cdetail-title{font-size:.82rem;font-weight:500;color:var(--white)}
+.cdetail-sub{font-size:.75rem;color:var(--muted);margin-top:.15rem}
+.cform{background:var(--card);padding:2.5rem;border:1px solid var(--border)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.fg{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.fg label{font-size:.68rem;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{padding:.85rem 1rem;border:1px solid var(--border);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--white);outline:none;transition:border-color .2s;resize:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.fg select option{background:var(--bg2);color:var(--white)}
+.form-submit{width:100%;padding:1rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:all .3s}
+.form-submit:hover{background:var(--accent2);transform:translateY(-1px)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:3rem 5rem;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:3rem}
+.footer-logo{display:flex;align-items:center;gap:.6rem}
+.flmark{width:30px;height:30px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.flmark span{color:var(--bg);font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+.fltxt{font-size:.88rem;font-weight:500;color:var(--white);letter-spacing:.06em;text-transform:uppercase}
+.footer-links{display:flex;justify-content:center;gap:2.5rem;list-style:none}
+.footer-links a{font-size:.75rem;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.05em;text-transform:uppercase}
+.footer-links a:hover{color:var(--white)}
+.footer-copy{font-size:.72rem;color:var(--muted);text-align:right}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.hero-left{animation:fadeUp 1s ease both}
+.hero-right{animation:fadeUp 1.1s ease both}
+
+@media(max-width:1024px){
+  nav{padding:0 2rem}
+  section{padding:4rem 2rem}
+  .hero{grid-template-columns:1fr;padding:8rem 2rem 4rem;gap:3rem}
+  .hero-right{display:none}
+  .hero-stats{grid-template-columns:1fr 1fr 1fr}
+  .hstat{padding:0 1rem}
+  .hstat:first-child{padding-left:0}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .process-grid{grid-template-columns:1fr;gap:3rem}
+  .process-imgs{display:none}
+  .results-inner{grid-template-columns:1fr;gap:3rem}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .cases-grid{grid-template-columns:1fr}
+  .tgrid{grid-template-columns:1fr}
+  .contact-inner{grid-template-columns:1fr;gap:3rem}
+  .form-row{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr;gap:1.5rem;text-align:center}
+  .footer-copy{text-align:center}
+  .footer-links{flex-wrap:wrap;gap:1.5rem}
+  .nav-links{display:none}
+  .marquee-wrap{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-mark"><span>M</span></div>
+    <span class="logo-text">Meridian</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#cases">Cases</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-left">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      <span>Strategic Growth Partners · Since 2006</span>
+    </div>
+    <h1 class="hero-h1">We turn ambition into <em>measurable results</em></h1>
+    <p class="hero-p">Meridian partners with ambitious businesses to build clear strategies, unlock growth, and create lasting competitive advantage in fast-moving markets.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-gold">Book a Free Consultation</a>
+      <a href="#cases" class="btn-ghost">View Case Studies</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <span class="hstat-n">$2.4B</span>
+        <span class="hstat-l">Revenue generated</span>
+      </div>
+      <div class="hstat">
+        <span class="hstat-n">340+</span>
+        <span class="hstat-l">Projects delivered</span>
+      </div>
+      <div class="hstat">
+        <span class="hstat-n">98%</span>
+        <span class="hstat-l">Client retention</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-stack">
+      <img class="hero-img-main" src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=85&auto=format&fit=crop" alt="Strategy team">
+      <img class="hero-img-accent" src="https://images.unsplash.com/photo-1553484771-371a605b060b?w=600&q=85&auto=format&fit=crop" alt="Data analysis">
+      <div class="hcard">
+        <div class="hcard-label">Avg. Revenue Growth</div>
+        <div class="hcard-val">+147%</div>
+        <div class="hcard-sub">In the first 12 months</div>
+        <div class="hcard-bar"><div class="hcard-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">Growth Strategy</span>
+    <span class="marquee-item">Market Expansion</span>
+    <span class="marquee-item">M&A Advisory</span>
+    <span class="marquee-item">Digital Transformation</span>
+    <span class="marquee-item">Operational Excellence</span>
+    <span class="marquee-item">Executive Coaching</span>
+    <span class="marquee-item">Growth Strategy</span>
+    <span class="marquee-item">Market Expansion</span>
+    <span class="marquee-item">M&A Advisory</span>
+    <span class="marquee-item">Digital Transformation</span>
+    <span class="marquee-item">Operational Excellence</span>
+    <span class="marquee-item">Executive Coaching</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="services-section">
+  <div class="services-top">
+    <div>
+      <div class="sec-label">What We Do</div>
+      <h2 class="sec-h2">Services built for <em>growth</em></h2>
+      <p class="sec-sub">A focused suite of consulting services designed to solve your most critical business challenges.</p>
+    </div>
+    <a href="#contact" class="btn-ghost">All Services →</a>
+  </div>
+  <div class="services-grid">
+    <div class="scard">
+      <div class="scard-icon">📈</div>
+      <div class="scard-num">01</div>
+      <div class="scard-title">Growth Strategy</div>
+      <p class="scard-text">We analyze your market, identify untapped opportunities, and build a clear roadmap to accelerate sustainable revenue growth.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+    <div class="scard">
+      <div class="scard-icon">🌍</div>
+      <div class="scard-num">02</div>
+      <div class="scard-title">Market Expansion</div>
+      <p class="scard-text">Enter new markets with confidence. Deep research, demand validation, and a go-to-market strategy built from the ground up.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+    <div class="scard">
+      <div class="scard-icon">⚙️</div>
+      <div class="scard-num">03</div>
+      <div class="scard-title">Operational Excellence</div>
+      <p class="scard-text">Streamline operations, reduce costs, and build scalable systems that support growth without sacrificing quality.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+    <div class="scard">
+      <div class="scard-icon">🤝</div>
+      <div class="scard-num">04</div>
+      <div class="scard-title">M&A Advisory</div>
+      <p class="scard-text">From target identification to integration planning, we guide you through every stage of mergers and acquisitions.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+    <div class="scard">
+      <div class="scard-icon">💡</div>
+      <div class="scard-num">05</div>
+      <div class="scard-title">Digital Transformation</div>
+      <p class="scard-text">Modernize with the right technology, data infrastructure, and digital culture to stay ahead of the competition.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+    <div class="scard">
+      <div class="scard-icon">🎯</div>
+      <div class="scard-num">06</div>
+      <div class="scard-title">Executive Coaching</div>
+      <p class="scard-text">Equip your leadership team with the tools, frameworks, and mindset to lead with clarity and drive exceptional performance.</p>
+      <div class="scard-arrow">Learn more →</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="process-section">
+  <div class="process-grid">
+    <div class="process-imgs">
+      <img class="pimg-main" src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=85&auto=format&fit=crop" alt="Consulting session">
+      <div class="pimg-card">
+        <div class="pimg-card-n">18+</div>
+        <div class="pimg-card-l">Years of expertise</div>
+      </div>
+      <div class="pimg-badge">
+        <div class="pimg-badge-title">McKinsey · BCG · Bain</div>
+        <div class="pimg-badge-sub">Alumni on our team</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-label">How We Work</div>
+      <h2 class="sec-h2">A proven process for <em>real results</em></h2>
+      <p class="sec-sub">Our four-phase methodology ensures every engagement delivers measurable impact — not just a slide deck.</p>
+      <div class="process-steps">
+        <div class="pstep">
+          <div class="pstep-num"><span>1</span></div>
+          <div>
+            <div class="pstep-title">Discovery & Diagnosis</div>
+            <p class="pstep-text">We start with deep listening — understanding your business, culture, and goals before proposing any solution.</p>
+          </div>
+        </div>
+        <div class="pstep">
+          <div class="pstep-num"><span>2</span></div>
+          <div>
+            <div class="pstep-title">Strategy Design</div>
+            <p class="pstep-text">A custom roadmap grounded in data, market insight, and your unique competitive position.</p>
+          </div>
+        </div>
+        <div class="pstep">
+          <div class="pstep-num"><span>3</span></div>
+          <div>
+            <div class="pstep-title">Execution Support</div>
+            <p class="pstep-text">We don't just hand you a plan — we work alongside your team to implement it in real time.</p>
+          </div>
+        </div>
+        <div class="pstep">
+          <div class="pstep-num"><span>4</span></div>
+          <div>
+            <div class="pstep-title">Measure & Optimize</div>
+            <p class="pstep-text">We track what matters, report transparently, and continuously refine the strategy based on results.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section">
+  <div class="results-inner">
+    <div>
+      <div class="sec-label">Our Impact</div>
+      <h2 class="sec-h2">Numbers that speak for themselves</h2>
+      <p class="sec-sub">Across 18 years and 340+ engagements, our results are consistent — measurable growth and lasting change.</p>
+      <a href="#contact" class="btn-gold" style="display:inline-block;margin-top:1.5rem">Start Your Transformation</a>
+    </div>
+    <div class="results-nums">
+      <div class="rnum"><span class="rnum-n">$2.4B</span><div class="rnum-title">Revenue Generated</div><p class="rnum-text">Total incremental revenue across all client engagements since 2006</p></div>
+      <div class="rnum"><span class="rnum-n">340+</span><div class="rnum-title">Projects Completed</div><p class="rnum-text">Across tech, finance, retail, healthcare, and manufacturing</p></div>
+      <div class="rnum"><span class="rnum-n">98%</span><div class="rnum-title">Client Retention</div><p class="rnum-text">Our clients come back because our work creates lasting value</p></div>
+      <div class="rnum"><span class="rnum-n">3.2x</span><div class="rnum-title">Average ROI</div><p class="rnum-text">Average return clients see within the first 12 months of engagement</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="cases" class="cases-section">
+  <div class="sec-label">Case Studies</div>
+  <h2 class="sec-h2">Real problems, <em>real results</em></h2>
+  <p class="sec-sub">A selection of engagements where our work created measurable, lasting impact.</p>
+  <div class="cases-grid">
+    <div class="case-item">
+      <div class="case-tag">Technology · Series B</div>
+      <h3 class="case-h3">Taking a SaaS platform from $4M to $18M ARR in 18 months</h3>
+      <p class="case-text">A fast-growing B2B SaaS company had strong product-market fit but lacked a scalable go-to-market strategy. We redesigned their sales process, opened two new verticals, and built a partner channel from scratch.</p>
+      <div class="case-results">
+        <div><span class="case-result-n">+350%</span><span class="case-result-l">ARR growth</span></div>
+        <div><span class="case-result-n">18mo</span><span class="case-result-l">Time to results</span></div>
+        <div><span class="case-result-n">2</span><span class="case-result-l">New markets</span></div>
+      </div>
+    </div>
+    <div class="case-item">
+      <div class="case-tag">Retail · Private Equity</div>
+      <h3 class="case-h3">Operational turnaround for a 200-store retail chain</h3>
+      <p class="case-text">A PE-backed retailer was burning cash across underperforming locations. We conducted a full operational audit, restructured the supply chain, and built a data-driven store performance framework.</p>
+      <div class="case-results">
+        <div><span class="case-result-n">$42M</span><span class="case-result-l">Cost savings</span></div>
+        <div><span class="case-result-n">+28%</span><span class="case-result-l">Margin improvement</span></div>
+        <div><span class="case-result-n">9mo</span><span class="case-result-l">Payback period</span></div>
+      </div>
+    </div>
+    <div class="case-item">
+      <div class="case-tag">Healthcare · Mid-market</div>
+      <h3 class="case-h3">Digital transformation for a regional healthcare network</h3>
+      <p class="case-text">A 12-hospital network was struggling with siloed data and outdated workflows. We led a full digital transformation including EHR integration, patient experience redesign, and staff training.</p>
+      <div class="case-results">
+        <div><span class="case-result-n">40%</span><span class="case-result-l">Process efficiency</span></div>
+        <div><span class="case-result-n">+62%</span><span class="case-result-l">Patient satisfaction</span></div>
+        <div><span class="case-result-n">$8M</span><span class="case-result-l">Annual savings</span></div>
+      </div>
+    </div>
+    <div class="case-item">
+      <div class="case-tag">Financial Services · M&A</div>
+      <h3 class="case-h3">Cross-border acquisition strategy for a global asset manager</h3>
+      <p class="case-text">A $15B AUM asset manager wanted to expand into Southeast Asia through acquisition. We identified 12 targets, led due diligence on 4, and supported integration planning for the final deal.</p>
+      <div class="case-results">
+        <div><span class="case-result-n">$1.1B</span><span class="case-result-l">Deal value</span></div>
+        <div><span class="case-result-n">3</span><span class="case-result-l">New markets</span></div>
+        <div><span class="case-result-n">6mo</span><span class="case-result-l">To close</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" class="team-section">
+  <div class="sec-label">Our People</div>
+  <h2 class="sec-h2">The team behind <em>your growth</em></h2>
+  <p class="sec-sub">Senior consultants with real operating experience — not just slide-deck theory.</p>
+  <div class="team-grid">
+    <div class="tmember">
+      <img class="tmember-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=85&auto=format&fit=crop" alt="James">
+      <div class="tmember-info">
+        <div class="tmember-name">James Harrington</div>
+        <div class="tmember-role">Managing Partner</div>
+        <p class="tmember-bio">Former McKinsey Principal. 22 years in strategy and transformation across 30+ countries.</p>
+      </div>
+    </div>
+    <div class="tmember">
+      <img class="tmember-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=85&auto=format&fit=crop" alt="Sarah">
+      <div class="tmember-info">
+        <div class="tmember-name">Sarah Mitchell</div>
+        <div class="tmember-role">Partner, Operations</div>
+        <p class="tmember-bio">Ex-BCG. Built and scaled operations for 3 unicorn companies before joining Meridian.</p>
+      </div>
+    </div>
+    <div class="tmember">
+      <img class="tmember-img" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=85&auto=format&fit=crop" alt="Marcus">
+      <div class="tmember-info">
+        <div class="tmember-name">Marcus Webb</div>
+        <div class="tmember-role">Partner, M&A</div>
+        <p class="tmember-bio">Led 40+ cross-border transactions totaling over $6B in deal value across Asia and Europe.</p>
+      </div>
+    </div>
+    <div class="tmember">
+      <img class="tmember-img" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&q=85&auto=format&fit=crop" alt="Priya">
+      <div class="tmember-info">
+        <div class="tmember-name">Priya Nair</div>
+        <div class="tmember-role">Partner, Digital</div>
+        <p class="tmember-bio">Former CTO turned consultant. Specializes in digital transformation and AI strategy for enterprises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="sec-label">Client Stories</div>
+  <h2 class="sec-h2">Trusted by industry <em>leaders</em></h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"Meridian didn't just give us a strategy — they transformed how we think about growth. Revenue up 180% in 14 months. Extraordinary team."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&q=80&auto=format&fit=crop" alt="CEO"></div>
+        <div><div class="tcard-name">Robert Chen</div><div class="tcard-role">CEO, Vertex Group</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"The market expansion work alone paid for itself ten times over. A rare combination of strategic thinking and real execution capability."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&q=80&auto=format&fit=crop" alt="COO"></div>
+        <div><div class="tcard-name">Sarah Mitchell</div><div class="tcard-role">COO, Arclight Co.</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"We came in skeptical of consultants. We left as believers. Three years later, Meridian is still our most trusted strategic partner."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&q=80&auto=format&fit=crop" alt="Founder"></div>
+        <div><div class="tcard-name">Marcus Webb</div><div class="tcard-role">Founder, Halcyon Inc.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="sec-label">Get In Touch</div>
+      <h2 class="sec-h2">Ready to <em>grow?</em></h2>
+      <p>Book a free 30-minute strategy call. No pitch, no pressure — just an honest conversation about your business and where we can help.</p>
+      <div class="cdetails">
+        <div class="cdetail">
+          <div class="cdetail-icon">📍</div>
+          <div><div class="cdetail-title">350 Fifth Avenue, Suite 4100</div><div class="cdetail-sub">New York, NY 10118</div></div>
+        </div>
+        <div class="cdetail">
+          <div class="cdetail-icon">📞</div>
+          <div><div class="cdetail-title">+1 (212) 500 7890</div><div class="cdetail-sub">Mon–Fri, 9am–6pm EST</div></div>
+        </div>
+        <div class="cdetail">
+          <div class="cdetail-icon">✉️</div>
+          <div><div class="cdetail-title">hello@meridianconsulting.com</div><div class="cdetail-sub">We reply within 24 hours</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cform">
+      <div class="form-row">
+        <div class="fg"><label>First Name</label><input type="text" placeholder="John"></div>
+        <div class="fg"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+      </div>
+      <div class="fg"><label>Company</label><input type="text" placeholder="Your company name"></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="john@company.com"></div>
+      <div class="fg">
+        <label>Service Needed</label>
+        <select>
+          <option value="">Select a service...</option>
+          <option>Growth Strategy</option>
+          <option>Market Expansion</option>
+          <option>Operational Excellence</option>
+          <option>M&A Advisory</option>
+          <option>Digital Transformation</option>
+          <option>Executive Coaching</option>
+        </select>
+      </div>
+      <div class="fg"><label>Tell us about your challenge</label><textarea rows="4" placeholder="Briefly describe your situation and goals..."></textarea></div>
+      <button class="form-submit">Book Free Consultation</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="flmark"><span>M</span></div>
+    <span class="fltxt">Meridian</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#cases">Cases</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2025 Meridian Consulting. All rights reserved.</span>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>10);
+},{passive:true});
+</script>
+</body>
+</html>
