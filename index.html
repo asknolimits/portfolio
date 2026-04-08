@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX NYC — No Limits</title>
+  <meta name="description" content="New York City's most elite performance training facility. No excuses. No limits.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #060606;
+      --surface: #111111;
+      --border: #1c1c1c;
+      --text: #ffffff;
+      --muted: #555555;
+      --accent: #FF2200;
+      --accent-dim: rgba(255,34,0,0.12);
+      --accent-glow: rgba(255,34,0,0.35);
+      --font-d: 'Barlow Condensed', sans-serif;
+      --font-b: 'DM Sans', sans-serif;
+    }
+
+    html { background: var(--bg); scroll-behavior: smooth; }
+    html.has-scroll-smooth { overflow: hidden; }
+    html.has-scroll-dragging { user-select: none; }
+    .has-scroll-smooth body { overflow: hidden; }
+    .has-scroll-smooth [data-scroll-container] { min-height: 100vh; }
+
+    body {
+      font-family: var(--font-b);
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 28px;
+    }
+    .pre-logo {
+      font-family: var(--font-d); font-size: clamp(3.5rem,8vw,7rem);
+      font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .pre-logo span { color: var(--accent); }
+    .pre-track { width: 220px; height: 1px; background: var(--border); overflow: hidden; }
+    .pre-bar { height: 1px; background: var(--accent); width: 0; transition: width 0.05s linear; }
+    .pre-num {
+      font-family: var(--font-d); font-size: 0.7rem;
+      letter-spacing: 0.25em; color: var(--muted);
+    }
+
+    /* ── CURSOR ── */
+    #cd, #cr {
+      position: fixed; z-index: 9999; border-radius: 50%;
+      pointer-events: none; transform: translate(-50%,-50%);
+      will-change: transform;
+    }
+    #cd { width: 8px; height: 8px; background: var(--accent); transition: width .18s, height .18s; }
+    #cr { width: 38px; height: 38px; border: 1px solid rgba(255,34,0,.5); transition: width .28s, height .28s; }
+    body.ch #cd { width: 14px; height: 14px; }
+    body.ch #cr { width: 58px; height: 58px; border-color: var(--accent); }
+    body.ca #cd { width: 5px; height: 5px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 28px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: padding .4s, background .4s, border-color .4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(6,6,6,.9); backdrop-filter: blur(24px);
+      padding: 18px 52px; border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-d); font-size: 1.5rem; font-weight: 900;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; color: var(--text);
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-d); font-size: .75rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      text-decoration: none; color: var(--muted);
+      position: relative; transition: color .3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--accent);
+      transition: width .35s cubic-bezier(.76,0,.24,1);
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      font-family: var(--font-d); font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 12px 28px; background: var(--accent); color: #fff;
+      text-decoration: none; border: none;
+      clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+      transition: transform .2s, box-shadow .2s;
+      display: inline-block;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 40px var(--accent-glow); }
+
+    /* ── GRAIN ── */
+    .grain {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 220px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; height: 100vh;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    #hero-canvas { position: absolute; inset: 0; z-index: 2; }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80') center/cover;
+      filter: brightness(.12) saturate(.25);
+    }
+    .hero-ov {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(6,6,6,.2) 0%, rgba(6,6,6,.55) 55%, #060606 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+      text-align: center; padding: 0 24px;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .32em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 24px; display: block;
+    }
+    .hero-title {
+      font-family: var(--font-d);
+      font-size: clamp(5.5rem, 17vw, 19rem);
+      font-weight: 900; line-height: .86;
+      letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .hl { display: block; overflow: hidden; }
+    .hl span { display: block; }
+    .hero-sub {
+      font-size: clamp(.9rem, 1.4vw, 1.05rem); font-weight: 300;
+      color: rgba(255,255,255,.45); letter-spacing: .05em;
+      margin: 28px auto 0; max-width: 420px;
+    }
+    .hero-ctas {
+      margin-top: 52px; display: flex; gap: 16px;
+      justify-content: center;
+    }
+    .btn-p {
+      font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 16px 44px; background: var(--accent); color: #fff;
+      text-decoration: none; display: inline-block;
+      clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-p:hover { transform: translateY(-3px); box-shadow: 0 20px 48px var(--accent-glow); }
+    .btn-g {
+      font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 15px 44px; background: transparent; color: #fff;
+      text-decoration: none; display: inline-block;
+      border: 1px solid rgba(255,255,255,.2); transition: border-color .3s;
+    }
+    .btn-g:hover { border-color: #fff; }
+    .hero-redline {
+      position: absolute; bottom: 108px; left: 0;
+      height: 1px; width: 0; background: var(--accent); z-index: 3;
+    }
+    .scroll-ind {
+      position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+      z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0;
+    }
+    .scroll-ind span {
+      font-family: var(--font-d); font-size: .62rem; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .scroll-pipe { width: 1px; height: 44px; background: var(--border); overflow: hidden; position: relative; }
+    .scroll-pipe::after {
+      content: ''; position: absolute; width: 1px; height: 44px; background: var(--accent);
+      animation: pipeDrop 1.5s ease-in-out infinite;
+    }
+    @keyframes pipeDrop { 0%{top:-44px} 100%{top:44px} }
+
+    /* ── STATS ── */
+    #stats {
+      background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .stats-inner {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      max-width: 1400px; margin: 0 auto;
+    }
+    .stat {
+      padding: 64px 40px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-n {
+      font-family: var(--font-d); font-size: clamp(3rem,5.5vw,5.5rem);
+      font-weight: 900; line-height: 1; letter-spacing: -.02em;
+    }
+    .stat-n em { color: var(--accent); font-style: normal; }
+    .stat-l {
+      font-size: .72rem; font-weight: 300; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--muted); margin-top: 10px;
+    }
+
+    /* ── MANIFESTO ── */
+    #manifesto {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 80px 48px; background: var(--bg); position: relative;
+    }
+    .manifesto-inner { text-align: center; max-width: 1200px; }
+    .manifesto-txt {
+      font-family: var(--font-d);
+      font-size: clamp(2.8rem,7vw,9.5rem);
+      font-weight: 900; line-height: .9;
+      letter-spacing: -.025em; text-transform: uppercase;
+    }
+    .mw { display: inline-block; overflow: hidden; margin: 0 .1em; }
+    .mw-i { display: inline-block; }
+    .mw.red .mw-i { color: var(--accent); }
+
+    /* ── PROGRAMS ── */
+    #programs { background: var(--bg); }
+    .prog-hd {
+      padding: 120px 52px 56px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .prog-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .prog-hd h2 em { color: var(--accent); font-style: normal; }
+    .prog-hint {
+      font-family: var(--font-d); font-size: .68rem; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .prog-hint::before { content: ''; display: block; width: 40px; height: 1px; background: var(--border); }
+    .prog-track {
+      display: flex; gap: 18px; padding: 0 52px 100px;
+      overflow-x: scroll; scrollbar-width: none; cursor: grab;
+    }
+    .prog-track::-webkit-scrollbar { display: none; }
+    .prog-card {
+      flex-shrink: 0; width: 340px; height: 500px;
+      position: relative; overflow: hidden; background: var(--surface);
+    }
+    .prog-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.55) saturate(.7);
+      transition: transform .9s cubic-bezier(.25,.46,.45,.94), filter .5s;
+    }
+    .prog-card:hover img { transform: scale(1.07); filter: brightness(.7) saturate(.9); }
+    .prog-card-body {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 28px;
+      background: linear-gradient(to top, rgba(6,6,6,.95) 55%, transparent);
+    }
+    .prog-tag {
+      font-family: var(--font-d); font-size: .6rem; font-weight: 700;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+    }
+    .prog-card h3 {
+      font-family: var(--font-d); font-size: 1.9rem; font-weight: 900;
+      letter-spacing: -.01em; text-transform: uppercase; line-height: .96;
+    }
+    .prog-card p {
+      font-size: .78rem; font-weight: 300;
+      color: rgba(255,255,255,.45); margin-top: 8px; line-height: 1.55;
+    }
+    .prog-arr {
+      position: absolute; top: 22px; right: 22px;
+      width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; transition: background .3s, border-color .3s;
+    }
+    .prog-card:hover .prog-arr { background: var(--accent); border-color: var(--accent); }
+
+    /* ── ABOUT ── */
+    #about { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+    .about-img {
+      position: sticky; top: 0; height: 100vh; overflow: hidden;
+    }
+    .about-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.65) saturate(.5);
+    }
+    .about-img-fade {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 50%, var(--bg));
+    }
+    .about-txt {
+      padding: 120px 80px 120px 64px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .about-txt h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,5vw,6rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em;
+      text-transform: uppercase; margin-bottom: 36px;
+    }
+    .about-txt h2 em { color: var(--accent); font-style: normal; }
+    .about-txt p {
+      font-size: .98rem; font-weight: 300;
+      color: rgba(255,255,255,.55); line-height: 1.85; margin-bottom: 20px;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 52px;
+    }
+    .astat { border-top: 1px solid var(--border); padding-top: 20px; }
+    .astat-n {
+      font-family: var(--font-d); font-size: 2.6rem; font-weight: 900;
+      color: var(--accent); letter-spacing: -.02em;
+    }
+    .astat-l {
+      font-size: .72rem; font-weight: 300; color: var(--muted);
+      letter-spacing: .12em; text-transform: uppercase; margin-top: 4px;
+    }
+
+    /* ── TRAINERS ── */
+    #trainers { padding: 120px 0; background: var(--bg); }
+    .trainers-hd {
+      padding: 0 52px; margin-bottom: 72px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .trainers-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .trainers-hd h2 em { color: var(--accent); font-style: normal; }
+    .trainers-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 18px; padding: 0 52px;
+    }
+    .t-card { position: relative; overflow: hidden; background: var(--surface); }
+    .t-img { height: 460px; overflow: hidden; position: relative; }
+    .t-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(1) brightness(.65);
+      transition: filter .65s ease, transform .9s cubic-bezier(.25,.46,.45,.94);
+    }
+    .t-card:hover .t-img img { filter: grayscale(0) brightness(.82); transform: scale(1.04); }
+    .t-info { padding: 18px 22px; border-top: 1px solid var(--border); }
+    .t-name {
+      font-family: var(--font-d); font-size: 1.25rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .02em;
+    }
+    .t-spec {
+      font-size: .72rem; font-weight: 300; color: var(--accent);
+      letter-spacing: .12em; text-transform: uppercase; margin-top: 4px;
+    }
+    .t-ov {
+      position: absolute; inset: 0; background: rgba(255,34,0,.07);
+      opacity: 0; transition: opacity .4s;
+    }
+    .t-card:hover .t-ov { opacity: 1; }
+
+    /* ── TRANSFORMATION ── */
+    #transformation { padding: 120px 52px; background: var(--surface); border-top: 1px solid var(--border); }
+    .tf-hd { text-align: center; margin-bottom: 80px; }
+    .tf-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .tf-hd h2 em { color: var(--accent); font-style: normal; }
+    .ba-wrap { max-width: 800px; margin: 0 auto; }
+    .ba-box {
+      position: relative; height: 540px; overflow: hidden;
+      border: 1px solid var(--border); user-select: none;
+    }
+    .ba-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .ba-after { clip-path: inset(0 50% 0 0); }
+    .ba-div {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      background: var(--accent); z-index: 10; transform: translateX(-50%); cursor: ew-resize;
+    }
+    .ba-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 44px; height: 44px; background: var(--accent);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; color: #fff; font-size: .85rem; font-weight: 700;
+    }
+    .ba-lbl {
+      position: absolute; top: 18px; z-index: 11;
+      font-family: var(--font-d); font-size: .62rem; font-weight: 700;
+      letter-spacing: .22em; text-transform: uppercase;
+      background: rgba(6,6,6,.8); padding: 5px 12px;
+    }
+    .ba-lbl.b { left: 18px; }
+    .ba-lbl.a { right: 18px; }
+    .ba-quote { margin-top: 36px; text-align: center; }
+    .ba-quote p {
+      font-size: .95rem; font-weight: 300;
+      color: rgba(255,255,255,.55); font-style: italic; line-height: 1.75;
+    }
+    .ba-quote strong {
+      display: block; margin-top: 14px; font-style: normal;
+      font-family: var(--font-d); font-size: .7rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+    }
+
+    /* ── SCHEDULE ── */
+    #schedule { padding: 120px 52px; background: var(--bg); }
+    .sch-hd { margin-bottom: 56px; }
+    .sch-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .sch-hd h2 em { color: var(--accent); font-style: normal; }
+    .sch-grid { display: flex; border: 1px solid var(--border); overflow-x: auto; }
+    .sch-day { flex: 1; min-width: 130px; border-right: 1px solid var(--border); }
+    .sch-day:last-child { border-right: none; }
+    .sch-dn {
+      font-family: var(--font-d); font-size: .66rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      padding: 16px; text-align: center;
+      background: var(--surface); color: var(--muted); border-bottom: 1px solid var(--border);
+    }
+    .sch-cls {
+      padding: 13px 14px; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background .2s;
+    }
+    .sch-cls:last-child { border-bottom: none; }
+    .sch-cls:hover { background: var(--accent-dim); }
+    .sch-cls:hover .sch-cn { color: var(--accent); }
+    .sch-t { font-family: var(--font-d); font-size: .6rem; letter-spacing: .1em; color: var(--muted); margin-bottom: 3px; }
+    .sch-cn { font-family: var(--font-d); font-size: .82rem; font-weight: 700; text-transform: uppercase; transition: color .2s; }
+    .sch-tr { font-size: .68rem; font-weight: 300; color: var(--muted); margin-top: 2px; }
+    .sch-cls.hot { background: var(--accent-dim); }
+    .sch-cls.hot .sch-cn { color: var(--accent); }
+
+    /* ── PRICING ── */
+    #pricing { padding: 120px 52px; background: var(--surface); border-top: 1px solid var(--border); }
+    .price-hd { text-align: center; margin-bottom: 80px; }
+    .price-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .price-hd h2 em { color: var(--accent); font-style: normal; }
+    .price-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 20px; max-width: 1080px; margin: 0 auto;
+    }
+    .pc { perspective: 1200px; height: 570px; }
+    .pc-inner {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      transition: transform .75s cubic-bezier(.23,1,.32,1);
+    }
+    .pc:hover .pc-inner { transform: rotateY(180deg); }
+    .pc-f, .pc-b {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      padding: 48px 40px; border: 1px solid var(--border);
+      background: var(--bg); display: flex; flex-direction: column;
+    }
+    .pc-b { transform: rotateY(180deg); background: #0d0d0d; }
+    .pc.feat .pc-f, .pc.feat .pc-b {
+      border-color: var(--accent);
+      box-shadow: 0 0 48px rgba(255,34,0,.12), inset 0 0 32px rgba(255,34,0,.04);
+    }
+    .pc-tier {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px;
+    }
+    .pc.feat .pc-tier { color: var(--accent); }
+    .pc-price {
+      font-family: var(--font-d); font-size: 5.5rem; font-weight: 900;
+      line-height: 1; letter-spacing: -.04em;
+    }
+    .pc-price sup { font-size: 1.6rem; vertical-align: top; margin-top: 14px; color: var(--accent); }
+    .pc-per { font-size: .72rem; font-weight: 300; color: var(--muted); margin-top: 8px; }
+    .pc-div { height: 1px; background: var(--border); margin: 28px 0; }
+    .pc-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; flex: 1; }
+    .pc-feats li {
+      font-size: .82rem; font-weight: 300; color: rgba(255,255,255,.55);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .pc-feats li::before { content: '—'; color: var(--accent); flex-shrink: 0; }
+    .pc-feats li.off { color: rgba(255,255,255,.18); text-decoration: line-through; }
+    .pc-cta {
+      display: block; text-align: center; margin-top: 28px;
+      font-family: var(--font-d); font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 13px 32px; border: 1px solid var(--border);
+      color: #fff; text-decoration: none; transition: background .3s, border-color .3s;
+    }
+    .pc-cta:hover, .pc.feat .pc-cta { background: var(--accent); border-color: var(--accent); }
+    .pc-b h3 {
+      font-family: var(--font-d); font-size: 1.6rem; font-weight: 900;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .pc-b p { font-size: .8rem; font-weight: 300; color: rgba(255,255,255,.45); line-height: 1.65; margin-bottom: 24px; }
+    .pc-b ul { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .pc-b ul li {
+      font-size: .78rem; font-weight: 300; color: rgba(255,255,255,.65);
+      display: flex; gap: 8px; line-height: 1.45;
+    }
+    .pc-b ul li span { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { padding: 120px 0; background: var(--bg); overflow: hidden; }
+    .testi-hd { text-align: center; margin-bottom: 64px; padding: 0 52px; }
+    .testi-hd h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,6vw,7rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    .testi-hd h2 em { color: var(--accent); font-style: normal; }
+    .mq-wrap { display: flex; flex-direction: column; gap: 18px; }
+    .mq-row { display: flex; gap: 18px; animation: mqs 38s linear infinite; }
+    .mq-row:nth-child(2) { animation-direction: reverse; animation-duration: 44s; }
+    @keyframes mqs { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .testi-card {
+      flex-shrink: 0; width: 400px; padding: 30px 28px;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    .testi-stars { color: var(--accent); font-size: .78rem; letter-spacing: 2px; margin-bottom: 14px; }
+    .testi-text {
+      font-size: .88rem; font-weight: 300; color: rgba(255,255,255,.65);
+      font-style: italic; line-height: 1.72; margin-bottom: 20px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--border); overflow: hidden; flex-shrink: 0;
+    }
+    .testi-av img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.4); }
+    .testi-name {
+      font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+    .testi-meta { font-size: .68rem; font-weight: 300; color: var(--muted); }
+
+    /* ── CTA BAND ── */
+    #cta-band {
+      min-height: 80vh; background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden; padding: 80px 52px;
+    }
+    #cta-band .grain { opacity: .055; }
+    .cta-cnt { position: relative; z-index: 2; }
+    .cta-cnt h2 {
+      font-family: var(--font-d);
+      font-size: clamp(4.5rem,13vw,15rem);
+      font-weight: 900; line-height: .84;
+      letter-spacing: -.03em; text-transform: uppercase; color: #fff;
+    }
+    .cta-cnt p {
+      font-size: 1.05rem; font-weight: 300;
+      color: rgba(255,255,255,.7); margin: 28px auto 0; max-width: 440px;
+    }
+    .btn-w {
+      font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 16px 52px; background: #fff; color: var(--accent);
+      text-decoration: none; display: inline-block; margin-top: 36px;
+      clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-w:hover { transform: translateY(-3px); box-shadow: 0 20px 48px rgba(0,0,0,.25); }
+
+    /* ── CONTACT ── */
+    #contact { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+    .contact-l {
+      padding: 120px 80px; background: var(--surface);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .contact-l h2 {
+      font-family: var(--font-d); font-size: clamp(3rem,5vw,6rem);
+      font-weight: 900; line-height: .9; letter-spacing: -.03em;
+      text-transform: uppercase; margin-bottom: 52px;
+    }
+    .contact-l h2 em { color: var(--accent); font-style: normal; }
+    .c-det { margin-bottom: 32px; }
+    .c-lbl {
+      font-family: var(--font-d); font-size: .62rem; font-weight: 700;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+    }
+    .c-val { font-size: .98rem; font-weight: 300; color: rgba(255,255,255,.65); line-height: 1.55; }
+    .c-soc { margin-top: 52px; display: flex; gap: 20px; }
+    .c-soc a {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color .3s;
+    }
+    .c-soc a:hover { color: var(--accent); }
+    .contact-r {
+      padding: 120px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .contact-r h3 {
+      font-family: var(--font-d); font-size: 1.1rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 52px;
+    }
+    .fg { position: relative; margin-bottom: 36px; }
+    .fg input, .fg textarea {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 1px solid var(--border);
+      color: #fff; font-family: var(--font-b); font-size: .98rem; font-weight: 300;
+      padding: 16px 0 12px; outline: none; transition: border-color .3s; cursor: none;
+    }
+    .fg textarea { resize: none; height: 72px; }
+    .fg input:focus, .fg textarea:focus { border-color: var(--accent); }
+    .fg label {
+      position: absolute; left: 0; top: 16px;
+      font-family: var(--font-d); font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+      transition: top .3s, font-size .3s, color .3s; pointer-events: none;
+    }
+    .fg input:focus ~ label,
+    .fg input:not(:placeholder-shown) ~ label,
+    .fg textarea:focus ~ label,
+    .fg textarea:not(:placeholder-shown) ~ label {
+      top: -4px; font-size: .58rem; color: var(--accent);
+    }
+    .f-submit {
+      font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 16px 52px; background: var(--accent); color: #fff;
+      border: none; cursor: none;
+      clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+      transition: transform .2s, box-shadow .2s;
+    }
+    .f-submit:hover { transform: translateY(-2px); box-shadow: 0 16px 36px var(--accent-glow); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 56px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .f-logo {
+      font-family: var(--font-d); font-size: 1.8rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+    .f-logo em { color: var(--accent); font-style: normal; }
+    .f-links { display: flex; gap: 32px; list-style: none; }
+    .f-links a {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color .3s;
+    }
+    .f-links a:hover { color: #fff; }
+    .f-copy { font-size: .72rem; font-weight: 300; color: var(--muted); }
+
+    /* ── SECTION LABEL ── */
+    .slbl {
+      font-family: var(--font-d); font-size: .65rem; font-weight: 700;
+      letter-spacing: .32em; text-transform: uppercase; color: var(--accent);
+      display: block; margin-bottom: 16px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .trainers-grid { grid-template-columns: repeat(2,1fr); }
+      .stats-inner { grid-template-columns: repeat(2,1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--border); }
+    }
+    @media (max-width: 900px) {
+      #about { grid-template-columns: 1fr; }
+      .about-img { position: relative; height: 55vh; }
+      #contact { grid-template-columns: 1fr; }
+      .price-grid { grid-template-columns: 1fr; max-width: 420px; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .prog-hd { padding: 80px 24px 40px; flex-direction: column; align-items: flex-start; gap: 16px; }
+      .prog-track { padding: 0 24px 60px; }
+      .trainers-hd, #transformation, #schedule, #pricing { padding-left: 24px; padding-right: 24px; }
+      .trainers-grid { padding: 0 24px; gap: 14px; }
+      footer { flex-direction: column; gap: 24px; text-align: center; }
+      .f-links { flex-wrap: wrap; justify-content: center; }
+      #cd, #cr { display: none; }
+      body { cursor: auto; }
+      .contact-l, .contact-r { padding: 80px 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">APEX<span>NYC</span></div>
+  <div class="pre-track"><div class="pre-bar" id="pbar"></div></div>
+  <div class="pre-num" id="pnum">0%</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cd"></div>
+<div id="cr"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">APEX<em>NYC</em></a>
+  <ul class="nav-links">
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta magnetic">Join Now</a>
+</nav>
+
+<!-- SCROLL CONTAINER -->
+<div id="scroll-container" data-scroll-container>
+
+  <!-- HERO -->
+  <section id="hero" data-scroll-section>
+    <div class="hero-bg"></div>
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-ov"></div>
+    <div class="grain"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow" id="eyebrow">New York City's Elite Training Ground</span>
+      <h1 class="hero-title">
+        <span class="hl"><span id="hl1">NO</span></span>
+        <span class="hl"><span id="hl2">LIMITS</span></span>
+      </h1>
+      <p class="hero-sub">Where champions are forged. Where excuses go to die.</p>
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn-p magnetic">Start Your Journey</a>
+        <a href="#programs" class="btn-g magnetic">Explore Programs</a>
+      </div>
+    </div>
+    <div class="hero-redline" id="redline"></div>
+    <div class="scroll-ind" id="scroll-ind">
+      <span>Scroll</span>
+      <div class="scroll-pipe"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats" data-scroll-section>
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-n"><span class="ctr" data-t="4200">0</span><em>+</em></div><div class="stat-l">Elite Members</div></div>
+      <div class="stat"><div class="stat-n"><span class="ctr" data-t="38">0</span></div><div class="stat-l">World-Class Trainers</div></div>
+      <div class="stat"><div class="stat-n"><span class="ctr" data-t="120">0</span><em>+</em></div><div class="stat-l">Weekly Classes</div></div>
+      <div class="stat"><div class="stat-n"><span class="ctr" data-t="11">0</span></div><div class="stat-l">Years of Excellence</div></div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section id="manifesto" data-scroll-section>
+    <div class="grain"></div>
+    <div class="manifesto-inner">
+      <span class="slbl">Our Creed</span>
+      <div class="manifesto-txt" id="manifesto-txt"></div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section id="programs" data-scroll-section>
+    <div class="prog-hd">
+      <div>
+        <span class="slbl">Train With Purpose</span>
+        <h2>Our<br><em>Programs</em></h2>
+      </div>
+      <div class="prog-hint">Drag to explore</div>
+    </div>
+    <div class="prog-track" id="prog-track">
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=85&auto=format&fit=crop" alt="Powerlifting" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Strength</div><h3>Powerlifting</h3><p>Build raw, functional power through the big three lifts.</p></div>
+      </div>
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=720&q=80" alt="HIIT" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Cardio</div><h3>HIIT Explosive</h3><p>Maximum intensity intervals that incinerate fat and build endurance.</p></div>
+      </div>
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=720&q=80" alt="Boxing" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Combat</div><h3>Boxing</h3><p>Learn the sweet science. Build speed, power and mental fortitude.</p></div>
+      </div>
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=720&q=80" alt="Olympic Lifting" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Olympic</div><h3>Weightlifting</h3><p>Snatch, clean & jerk. Explosive power meets technical mastery.</p></div>
+      </div>
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=720&q=80" alt="CrossFit" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Functional</div><h3>CrossFit</h3><p>Constantly varied. Infinitely challenging. Endlessly rewarding.</p></div>
+      </div>
+      <div class="prog-card">
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=720&q=80" alt="Power Yoga" loading="lazy">
+        <div class="prog-arr">→</div>
+        <div class="prog-card-body"><div class="prog-tag">Recovery</div><h3>Power Yoga</h3><p>Athletic flexibility and mental clarity for serious athletes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" data-scroll-section>
+    <div class="about-img" data-scroll data-scroll-sticky data-scroll-target="#about">
+      <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80" alt="APEX NYC interior">
+      <div class="about-img-fade"></div>
+    </div>
+    <div class="about-txt">
+      <span class="slbl">Our Story</span>
+      <h2>Built For<br><em>Champions</em></h2>
+      <p>APEX NYC was born in 2013 from one conviction: New York deserved a training facility that refused to compromise. Not a gym. Not a fitness center. A performance laboratory.</p>
+      <p>We built everything from the ground up — the programming, the culture, the standards. We recruited coaches who compete at the highest levels and designed spaces that demand your best.</p>
+      <p>Every detail was obsessed over. Every class was engineered. Every member who walks through our doors is treated as the elite athlete they are about to become.</p>
+      <div class="about-stats">
+        <div class="astat"><div class="astat-n">40K</div><div class="astat-l">sq ft of training space</div></div>
+        <div class="astat"><div class="astat-n">3</div><div class="astat-l">NYC locations</div></div>
+        <div class="astat"><div class="astat-n">97%</div><div class="astat-l">member retention</div></div>
+        <div class="astat"><div class="astat-n">23</div><div class="astat-l">national champions</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINERS -->
+  <section id="trainers" data-scroll-section>
+    <div class="trainers-hd">
+      <div>
+        <span class="slbl">The Coaches</span>
+        <h2>Our <em>Elite</em><br>Staff</h2>
+      </div>
+    </div>
+    <div class="trainers-grid">
+      <div class="t-card">
+        <div class="t-img"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" alt="Marcus Reid" loading="lazy"><div class="t-ov"></div></div>
+        <div class="t-info"><div class="t-name">Marcus Reid</div><div class="t-spec">Strength & Powerlifting</div></div>
+      </div>
+      <div class="t-card">
+        <div class="t-img"><img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=500&q=85&auto=format&fit=crop" alt="Sofia Vega" loading="lazy"><div class="t-ov"></div></div>
+        <div class="t-info"><div class="t-name">Sofia Vega</div><div class="t-spec">HIIT & Conditioning</div></div>
+      </div>
+      <div class="t-card">
+        <div class="t-img"><img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=600&q=80" alt="Devon Clarke" loading="lazy"><div class="t-ov"></div></div>
+        <div class="t-info"><div class="t-name">Devon Clarke</div><div class="t-spec">Boxing & Combat</div></div>
+      </div>
+      <div class="t-card">
+        <div class="t-img"><img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?w=600&q=80" alt="Yuna Park" loading="lazy"><div class="t-ov"></div></div>
+        <div class="t-info"><div class="t-name">Yuna Park</div><div class="t-spec">Olympic Lifting & Mobility</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSFORMATION -->
+  <section id="transformation" data-scroll-section>
+    <div class="tf-hd">
+      <span class="slbl">Real Results</span>
+      <h2>The <em>Transformation</em></h2>
+    </div>
+    <div class="ba-wrap">
+      <div class="ba-box" id="ba-box">
+        <img class="ba-img" src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80" alt="Before">
+        <img class="ba-img ba-after" id="ba-after-img" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800&q=80" alt="After">
+        <div class="ba-lbl b">Before</div>
+        <div class="ba-lbl a">After</div>
+        <div class="ba-div" id="ba-div"><div class="ba-btn">⟺</div></div>
+      </div>
+      <div class="ba-quote">
+        <p>"In 6 months with APEX, I lost 42 lbs and competed in my first powerlifting meet. The coaches don't let you settle — they push you past limits you didn't know existed."</p>
+        <strong>— James M., APEX Member since 2022</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="schedule" data-scroll-section>
+    <div class="sch-hd">
+      <span class="slbl">Weekly Training</span>
+      <h2>Class <em>Schedule</em></h2>
+    </div>
+    <div class="sch-grid">
+      <div class="sch-day">
+        <div class="sch-dn">Mon</div>
+        <div class="sch-cls"><div class="sch-t">6:00 AM</div><div class="sch-cn">Powerlifting</div><div class="sch-tr">Marcus Reid</div></div>
+        <div class="sch-cls hot"><div class="sch-t">9:00 AM</div><div class="sch-cn">HIIT Blast</div><div class="sch-tr">Sofia Vega</div></div>
+        <div class="sch-cls"><div class="sch-t">12:00 PM</div><div class="sch-cn">Boxing</div><div class="sch-tr">Devon Clarke</div></div>
+        <div class="sch-cls"><div class="sch-t">6:00 PM</div><div class="sch-cn">CrossFit</div><div class="sch-tr">Team APEX</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Tue</div>
+        <div class="sch-cls"><div class="sch-t">6:00 AM</div><div class="sch-cn">Olympic Lifting</div><div class="sch-tr">Yuna Park</div></div>
+        <div class="sch-cls"><div class="sch-t">10:00 AM</div><div class="sch-cn">Power Yoga</div><div class="sch-tr">Sofia Vega</div></div>
+        <div class="sch-cls hot"><div class="sch-t">7:00 PM</div><div class="sch-cn">Powerlifting</div><div class="sch-tr">Marcus Reid</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Wed</div>
+        <div class="sch-cls"><div class="sch-t">6:00 AM</div><div class="sch-cn">HIIT Blast</div><div class="sch-tr">Team APEX</div></div>
+        <div class="sch-cls"><div class="sch-t">12:00 PM</div><div class="sch-cn">Boxing</div><div class="sch-tr">Devon Clarke</div></div>
+        <div class="sch-cls hot"><div class="sch-t">7:00 PM</div><div class="sch-cn">CrossFit</div><div class="sch-tr">Marcus Reid</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Thu</div>
+        <div class="sch-cls"><div class="sch-t">6:00 AM</div><div class="sch-cn">Powerlifting</div><div class="sch-tr">Marcus Reid</div></div>
+        <div class="sch-cls"><div class="sch-t">9:00 AM</div><div class="sch-cn">Power Yoga</div><div class="sch-tr">Yuna Park</div></div>
+        <div class="sch-cls"><div class="sch-t">6:00 PM</div><div class="sch-cn">HIIT Blast</div><div class="sch-tr">Sofia Vega</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Fri</div>
+        <div class="sch-cls hot"><div class="sch-t">6:00 AM</div><div class="sch-cn">Full Send Friday</div><div class="sch-tr">All Coaches</div></div>
+        <div class="sch-cls"><div class="sch-t">10:00 AM</div><div class="sch-cn">Boxing</div><div class="sch-tr">Devon Clarke</div></div>
+        <div class="sch-cls"><div class="sch-t">6:00 PM</div><div class="sch-cn">CrossFit</div><div class="sch-tr">Team APEX</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Sat</div>
+        <div class="sch-cls hot"><div class="sch-t">8:00 AM</div><div class="sch-cn">APEX Challenge</div><div class="sch-tr">All Coaches</div></div>
+        <div class="sch-cls"><div class="sch-t">10:00 AM</div><div class="sch-cn">Powerlifting</div><div class="sch-tr">Marcus Reid</div></div>
+        <div class="sch-cls"><div class="sch-t">12:00 PM</div><div class="sch-cn">HIIT Blast</div><div class="sch-tr">Sofia Vega</div></div>
+      </div>
+      <div class="sch-day">
+        <div class="sch-dn">Sun</div>
+        <div class="sch-cls"><div class="sch-t">9:00 AM</div><div class="sch-cn">Power Yoga</div><div class="sch-tr">Yuna Park</div></div>
+        <div class="sch-cls"><div class="sch-t">11:00 AM</div><div class="sch-cn">Open Gym</div><div class="sch-tr">Self-Directed</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" data-scroll-section>
+    <div class="price-hd">
+      <span class="slbl">Investment</span>
+      <h2>Choose Your <em>Weapon</em></h2>
+    </div>
+    <div class="price-grid">
+      <div class="pc">
+        <div class="pc-inner">
+          <div class="pc-f">
+            <div class="pc-tier">Contender</div>
+            <div class="pc-price"><sup>$</sup>89</div>
+            <div class="pc-per">per month</div>
+            <div class="pc-div"></div>
+            <ul class="pc-feats">
+              <li>Unlimited group classes</li>
+              <li>Full gym floor access</li>
+              <li>Premium locker rooms</li>
+              <li class="off">Personal training sessions</li>
+              <li class="off">Nutrition coaching</li>
+              <li class="off">Recovery suite</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Get Started</a>
+          </div>
+          <div class="pc-b">
+            <h3>Contender</h3>
+            <p>Everything you need to begin your APEX journey and train at elite level.</p>
+            <ul>
+              <li><span>✓</span> 120+ weekly group classes</li>
+              <li><span>✓</span> State-of-the-art equipment</li>
+              <li><span>✓</span> Cold plunge & sauna access</li>
+              <li><span>✓</span> APEX mobile app booking</li>
+              <li><span>✓</span> Community challenges & events</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Start Today</a>
+          </div>
+        </div>
+      </div>
+      <div class="pc feat">
+        <div class="pc-inner">
+          <div class="pc-f">
+            <div class="pc-tier">Champion ★ Most Popular</div>
+            <div class="pc-price"><sup>$</sup>189</div>
+            <div class="pc-per">per month</div>
+            <div class="pc-div"></div>
+            <ul class="pc-feats">
+              <li>Everything in Contender</li>
+              <li>4 PT sessions / month</li>
+              <li>Monthly nutrition consult</li>
+              <li>Full recovery suite access</li>
+              <li>Priority class booking</li>
+              <li class="off">Unlimited PT sessions</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Join Champions</a>
+          </div>
+          <div class="pc-b">
+            <h3>Champion</h3>
+            <p>The most effective plan — group training fused with personal coaching for maximum transformation.</p>
+            <ul>
+              <li><span>✓</span> All Contender benefits</li>
+              <li><span>✓</span> 4 × 60-min PT sessions</li>
+              <li><span>✓</span> Monthly nutrition consultation</li>
+              <li><span>✓</span> Ice bath, sauna, massage gun</li>
+              <li><span>✓</span> Priority 48h advance booking</li>
+              <li><span>✓</span> Quarterly performance tests</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Join Today</a>
+          </div>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-inner">
+          <div class="pc-f">
+            <div class="pc-tier">Apex Elite</div>
+            <div class="pc-price"><sup>$</sup>349</div>
+            <div class="pc-per">per month</div>
+            <div class="pc-div"></div>
+            <ul class="pc-feats">
+              <li>Everything in Champion</li>
+              <li>Unlimited PT sessions</li>
+              <li>Full nutrition plan</li>
+              <li>24/7 gym access</li>
+              <li>2 guest passes/month</li>
+              <li>Concierge support</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Go Elite</a>
+          </div>
+          <div class="pc-b">
+            <h3>Apex Elite</h3>
+            <p>No limits. No restrictions. Complete access to everything APEX has to offer.</p>
+            <ul>
+              <li><span>✓</span> All Champion benefits</li>
+              <li><span>✓</span> Unlimited personal training</li>
+              <li><span>✓</span> Full meal plan + macro coaching</li>
+              <li><span>✓</span> 24/7 keycard facility access</li>
+              <li><span>✓</span> 2 guest passes per month</li>
+              <li><span>✓</span> Dedicated APEX concierge</li>
+              <li><span>✓</span> Competition prep support</li>
+            </ul>
+            <a href="#contact" class="pc-cta">Go Elite</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" data-scroll-section>
+    <div class="testi-hd">
+      <span class="slbl">The Community</span>
+      <h2>They Did It.<br><em>So Can You.</em></h2>
+    </div>
+    <div class="mq-wrap">
+      <div class="mq-row" id="mq1"></div>
+      <div class="mq-row" id="mq2"></div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section id="cta-band" data-scroll-section>
+    <div class="grain"></div>
+    <div class="cta-cnt">
+      <h2>Your<br>Move.</h2>
+      <p>Stop watching. Stop waiting. The only thing between you and your best self is a single decision.</p>
+      <a href="#contact" class="btn-w magnetic">Claim Your Spot</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" data-scroll-section>
+    <div class="contact-l">
+      <span class="slbl">Get In Touch</span>
+      <h2>Let's<br><em>Talk.</em></h2>
+      <div class="c-det"><div class="c-lbl">Location</div><div class="c-val">247 West 38th Street<br>New York, NY 10018</div></div>
+      <div class="c-det"><div class="c-lbl">Hours</div><div class="c-val">Mon–Fri: 5:00 AM – 11:00 PM<br>Sat–Sun: 7:00 AM – 9:00 PM</div></div>
+      <div class="c-det"><div class="c-lbl">Phone</div><div class="c-val">+1 (212) 555-APEX</div></div>
+      <div class="c-det"><div class="c-lbl">Email</div><div class="c-val">hello@apexnyc.com</div></div>
+      <div class="c-soc">
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">YouTube</a>
+        <a href="#">Spotify</a>
+      </div>
+    </div>
+    <div class="contact-r">
+      <h3>Begin Your Transformation</h3>
+      <form>
+        <div class="fg"><input type="text" id="fn" placeholder=" " autocomplete="off"><label for="fn">Full Name</label></div>
+        <div class="fg"><input type="email" id="em" placeholder=" " autocomplete="off"><label for="em">Email Address</label></div>
+        <div class="fg"><input type="tel" id="ph" placeholder=" " autocomplete="off"><label for="ph">Phone Number</label></div>
+        <div class="fg"><textarea id="mg" placeholder=" "></textarea><label for="mg">Your Goal</label></div>
+        <button type="submit" class="f-submit magnetic">Send Message →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer data-scroll-section>
+    <div class="f-logo">APEX<em>NYC</em></div>
+    <ul class="f-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Careers</a></li>
+      <li><a href="#">Press</a></li>
+    </ul>
+    <div class="f-copy">© 2025 APEX NYC. No Limits.</div>
+  </footer>
+
+</div><!-- end scroll-container -->
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+<script>
+// ─────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────
+const isMobile = () => window.innerWidth < 768;
+const isTouch  = () => window.matchMedia('(pointer:coarse)').matches;
+
+// ─────────────────────────────────────────────
+// BUILD MANIFESTO
+// ─────────────────────────────────────────────
+(function() {
+  const words = ["WE","DON'T","BUILD","BODIES.","WE","BUILD","WEAPONS."];
+  const red   = new Set(["WEAPONS."]);
+  const el    = document.getElementById('manifesto-txt');
+  el.innerHTML = words.map(w =>
+    `<span class="mw${red.has(w)?' red':''}"><span class="mw-i">${w}</span></span> `
+  ).join('');
+})();
+
+// ─────────────────────────────────────────────
+// BUILD TESTIMONIALS MARQUEE
+// ─────────────────────────────────────────────
+(function() {
+  const data = [
+    { name:"Jordan K.", meta:"Lost 38 lbs in 5 months", text:'"APEX completely rewired how I think about training. The coaches push you to levels you never imagined."' },
+    { name:"Priya S.",  meta:"Competed at Nationals",   text:'"I came in a complete beginner. Within a year I was competing in Olympic weightlifting. The coaching here is elite."' },
+    { name:"Marcus T.", meta:"250 → 185 lbs",           text:'"The community at APEX is unlike anything I\'ve experienced. Everyone pushes each other. It\'s addictive."' },
+    { name:"Elena R.",  meta:"Marathon PR by 22 min",   text:'"The HIIT programming transformed my endurance. I\'m a better runner, a better athlete, a better person."' },
+    { name:"Chris V.",  meta:"400 lb deadlift",         text:'"I\'ve been to every major gym in NYC. APEX is on a different level. The equipment, the programming, the vibe."' },
+    { name:"Aisha M.",  meta:"Postpartum comeback",     text:'"After my second child I thought my athletic days were over. APEX brought me back stronger than ever."' },
+    { name:"David L.",  meta:"60 lbs of muscle gained", text:'"Marcus is the best strength coach I\'ve ever worked with. My numbers went through the roof in 8 months."' },
+    { name:"Nina W.",   meta:"First boxing match won",  text:'"Devon had me throwing combinations week one. By month 6 I stepped into my first amateur bout and won."' },
+  ];
+
+  function card(t) {
+    return `<div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">${t.text}</div>
+      <div class="testi-author">
+        <div class="testi-av"><img src="https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(t.name)}" alt="${t.name}" loading="lazy"></div>
+        <div><div class="testi-name">${t.name}</div><div class="testi-meta">${t.meta}</div></div>
+      </div>
+    </div>`;
+  }
+
+  const set1 = [...data,...data].map(card).join('');
+  const set2 = [...data.slice(3),...data.slice(0,3),...data.slice(3),...data.slice(0,3)].map(card).join('');
+  document.getElementById('mq1').innerHTML = set1;
+  document.getElementById('mq2').innerHTML = set2;
+})();
+
+// ─────────────────────────────────────────────
+// PRELOADER
+// ─────────────────────────────────────────────
+function runPreloader(onDone) {
+  const bar = document.getElementById('pbar');
+  const num = document.getElementById('pnum');
+  let p = 0;
+  const iv = setInterval(() => {
+    p += Math.random() * 14;
+    if (p >= 100) { p = 100; clearInterval(iv); }
+    bar.style.width = p + '%';
+    num.textContent = Math.round(p) + '%';
+  }, 70);
+
+  setTimeout(() => {
+    gsap.to('#preloader', {
+      yPercent: -100, duration: 1.1, ease: 'expo.inOut',
+      onComplete: () => {
+        document.getElementById('preloader').style.display = 'none';
+        onDone();
+      }
+    });
+  }, 1700);
+}
+
+// ─────────────────────────────────────────────
+// HERO ENTRANCE
+// ─────────────────────────────────────────────
+function heroEntrance() {
+  // Ensure elements are in their starting positions before animating
+  gsap.set('#eyebrow',   { opacity: 0 });
+  gsap.set('#hl1, #hl2', { yPercent: 110 });
+  gsap.set('.hero-sub',  { opacity: 0 });
+  gsap.set('.hero-ctas', { opacity: 0 });
+  gsap.set('#scroll-ind',{ opacity: 0 });
+  gsap.set('#redline',   { width: 0 });
+
+  const tl = gsap.timeline();
+  tl.to('#eyebrow',    { opacity: 1, duration: .8, ease: 'power3.out' }, 0)
+    .to('#hl1',        { yPercent: 0, duration: 1.3, ease: 'expo.out' }, .2)
+    .to('#hl2',        { yPercent: 0, duration: 1.3, ease: 'expo.out' }, .35)
+    .to('.hero-sub',   { opacity: 1, duration: .8, ease: 'power3.out' }, .7)
+    .to('.hero-ctas',  { opacity: 1, duration: .7, ease: 'power3.out' }, .9)
+    .to('#redline',    { width: '55%', duration: 1.4, ease: 'expo.inOut' }, .6)
+    .to('#scroll-ind', { opacity: 1, duration: .6 }, 1.2);
+}
+
+// ─────────────────────────────────────────────
+// THREE.JS — PARTICLE SILHOUETTE
+// ─────────────────────────────────────────────
+function initThree() {
+  if (isMobile()) return;
+
+  const canvas   = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, .1, 100);
+  camera.position.z = 5.5;
+
+  const COUNT = 7000;
+
+  // ── Human body target positions ──
+  function bodyPositions(n) {
+    const arr = new Float32Array(n * 3);
+    let i = 0;
+    const add = (x, y, z) => { if (i < n) { arr[i*3]=x; arr[i*3+1]=y; arr[i*3+2]=z; i++; } };
+
+    // Head (circle)
+    for (let k = 0; k < n * .09; k++) {
+      const a = Math.random() * Math.PI * 2, r = Math.random() * .38;
+      add(Math.cos(a)*r, 2.25 + Math.sin(a)*r, (Math.random()-.5)*.1);
+    }
+    // Neck
+    for (let k = 0; k < n * .02; k++) add((Math.random()-.5)*.17, 1.75 + Math.random()*.25, 0);
+    // Shoulders
+    for (let k = 0; k < n * .05; k++) {
+      const s = Math.random() > .5 ? 1 : -1;
+      add(s*(0.52 + Math.random()*.35), 1.52 + (Math.random()-.5)*.18, (Math.random()-.5)*.1);
+    }
+    // Torso (tapers at waist)
+    for (let k = 0; k < n * .22; k++) {
+      const y = Math.random(); const w = .28 + y * .3;
+      add((Math.random()-.5)*w*2.9, .28 + y * 1.15, (Math.random()-.5)*.18);
+    }
+    // Upper arms
+    for (let k = 0; k < n * .09; k++) {
+      const t = Math.random(), s = k < n*.045 ? -1 : 1;
+      add(s*(.72 + t*.38), 1.5 - t*.7, (Math.random()-.5)*.1);
+    }
+    // Forearms
+    for (let k = 0; k < n * .07; k++) {
+      const t = Math.random(), s = k < n*.035 ? -1 : 1;
+      add(s*(1.1 + t*.28), .8 - t*.65, 0);
+    }
+    // Left leg
+    for (let k = 0; k < n * .12; k++) {
+      const t = Math.random();
+      add(-.27 + (Math.random()-.5)*.18, .28 - t * 2.1, (Math.random()-.5)*.08);
+    }
+    // Right leg
+    for (let k = 0; k < n * .12; k++) {
+      const t = Math.random();
+      add(.27 + (Math.random()-.5)*.18, .28 - t * 2.1, (Math.random()-.5)*.08);
+    }
+    // Fill rest with scattered particles
+    while (i < n) add((Math.random()-.5)*10, (Math.random()-.5)*8, (Math.random()-.5)*.5);
+    return arr;
+  }
+
+  const target = bodyPositions(COUNT);
+  const start  = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT * 3; i++) start[i] = (Math.random()-.5) * 18;
+  const current = new Float32Array(start);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(current, 3));
+
+  // Colors: 75% red, 25% white
+  const cols = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT; i++) {
+    const white = Math.random() > .72;
+    cols[i*3] = 1; cols[i*3+1] = white ? 1 : .13; cols[i*3+2] = white ? 1 : 0;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+
+  const mat = new THREE.PointsMaterial({
+    size: .024, vertexColors: true,
+    transparent: true, opacity: .88,
+    sizeAttenuation: true,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+
+  const pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+
+  // Assemble animation (after preloader)
+  const prog = { t: 0 };
+  let assembled = false;
+  gsap.to(prog, {
+    t: 1, duration: 3, ease: 'power3.inOut', delay: 2.2,
+    onUpdate() {
+      const p = geo.attributes.position.array;
+      for (let i = 0; i < COUNT * 3; i++)
+        p[i] = start[i] + (target[i] - start[i]) * prog.t;
+      geo.attributes.position.needsUpdate = true;
+    },
+    onComplete() { assembled = true; }
+  });
+
+  const clock = new THREE.Clock();
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - .5) * .28;
+    my = -(e.clientY / window.innerHeight - .5) * .22;
+  });
+
+  renderer.setAnimationLoop(() => {
+    const t = clock.getElapsedTime();
+    if (assembled) {
+      const p = geo.attributes.position.array;
+      for (let i = 0; i < COUNT; i++) {
+        const b = Math.sin(t * .75 + i * .0008) * .014;
+        p[i*3]   = target[i*3]   + b * .45;
+        p[i*3+1] = target[i*3+1] + b;
+        p[i*3+2] = target[i*3+2] + b * .25;
+      }
+      geo.attributes.position.needsUpdate = true;
+    }
+    pts.rotation.y += (mx - pts.rotation.y) * .025;
+    pts.rotation.x += (my - pts.rotation.x) * .025;
+    renderer.render(scene, camera);
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+}
+
+// ─────────────────────────────────────────────
+// LOCOMOTIVE SCROLL + GSAP SCROLLTRIGGER
+// ─────────────────────────────────────────────
+let loco;
+
+function initScroll() {
+  try {
+    loco = new LocomotiveScroll({
+      el: document.getElementById('scroll-container'),
+      smooth: true, multiplier: .92, lerp: .08,
+      smartphone: { smooth: false }, tablet: { smooth: false },
+    });
+
+    loco.on('scroll', ScrollTrigger.update);
+
+    ScrollTrigger.scrollerProxy('#scroll-container', {
+      scrollTop(v) {
+        return arguments.length
+          ? loco.scrollTo(v, { duration: 0, disableLerp: true })
+          : loco.scroll.instance.scroll.y;
+      },
+      getBoundingClientRect() {
+        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+      },
+      pinType: document.getElementById('scroll-container').style.transform ? 'transform' : 'fixed',
+    });
+    ScrollTrigger.addEventListener('refresh', () => loco.update());
+  } catch(e) {
+    // Locomotive Scroll failed — fall back to native scroll
+    console.warn('Locomotive Scroll init failed, using native scroll:', e);
+    loco = null;
+  }
+}
+
+function initGSAP() {
+  gsap.registerPlugin(ScrollTrigger);
+  const sc = '#scroll-container';
+
+  // Nav scroll state
+  ScrollTrigger.create({
+    scroller: sc, start: 'top -60',
+    onEnter:    () => document.getElementById('nav').classList.add('scrolled'),
+    onLeaveBack:() => document.getElementById('nav').classList.remove('scrolled'),
+  });
+
+  // Counters
+  document.querySelectorAll('.ctr').forEach(el => {
+    ScrollTrigger.create({
+      scroller: sc, trigger: el, start: 'top 88%', once: true,
+      onEnter() {
+        const tgt = +el.dataset.t;
+        gsap.to({ v: 0 }, {
+          v: tgt, duration: 2.2, ease: 'power2.out',
+          onUpdate() { el.textContent = Math.round(this.targets()[0].v).toLocaleString(); }
+        });
+      }
+    });
+  });
+
+  // Manifesto words
+  gsap.set('.mw-i', { yPercent: 110 });
+  ScrollTrigger.create({
+    scroller: sc, trigger: '#manifesto', start: 'top 90%', once: true,
+    onEnter() {
+      gsap.to('.mw-i', { yPercent: 0, duration: .95, stagger: .07, ease: 'expo.out' });
+    }
+  });
+
+  // Program cards
+  gsap.from('.prog-card', {
+    opacity: 0, y: 70, stagger: .1, duration: .95, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '#programs .prog-track', start: 'top 95%' }
+  });
+
+  // About
+  gsap.from('.about-txt > *', {
+    opacity: 0, x: 40, stagger: .1, duration: .85, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.about-txt', start: 'top 95%' }
+  });
+  gsap.from('.astat', {
+    opacity: 0, y: 28, stagger: .1, duration: .7, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.about-stats', start: 'top 95%' }
+  });
+
+  // Trainer cards
+  gsap.from('.t-card', {
+    opacity: 0, y: 80, stagger: .12, duration: 1.1, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.trainers-grid', start: 'top 95%' }
+  });
+
+  // Before/after
+  gsap.from('.ba-box', {
+    opacity: 0, scale: .95, duration: 1, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '#transformation', start: 'top 95%' }
+  });
+
+  // Schedule
+  gsap.from('.sch-day', {
+    opacity: 0, y: 32, stagger: .06, duration: .7, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.sch-grid', start: 'top 95%' }
+  });
+
+  // Pricing
+  gsap.from('.pc', {
+    opacity: 0, y: 60, stagger: .13, duration: .95, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.price-grid', start: 'top 95%' }
+  });
+
+  // CTA band
+  gsap.from('#cta-band h2', {
+    opacity: 0, y: 80, duration: 1.3, ease: 'expo.out',
+    scrollTrigger: { scroller: sc, trigger: '#cta-band', start: 'top 95%' }
+  });
+  gsap.from('#cta-band p, #cta-band .btn-w', {
+    opacity: 0, y: 30, stagger: .1, duration: .8, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '#cta-band', start: 'top 95%' }
+  });
+
+  // Contact
+  gsap.from('.contact-l > *', {
+    opacity: 0, x: -36, stagger: .09, duration: .85, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '#contact', start: 'top 95%' }
+  });
+  gsap.from('.contact-r > *, .fg', {
+    opacity: 0, x: 36, stagger: .08, duration: .8, ease: 'power3.out',
+    scrollTrigger: { scroller: sc, trigger: '.contact-r', start: 'top 95%' }
+  });
+
+  // Section labels
+  gsap.utils.toArray('.slbl').forEach(el => {
+    gsap.from(el, {
+      opacity: 0, x: -18, duration: .6, ease: 'power3.out',
+      scrollTrigger: { scroller: sc, trigger: el, start: 'top 95%' }
+    });
+  });
+
+  // Section headings clip-reveal
+  gsap.utils.toArray('#programs h2, #trainers h2, .tf-hd h2, .sch-hd h2, .price-hd h2, .testi-hd h2, .about-txt h2').forEach(el => {
+    gsap.from(el, {
+      opacity: 0, y: 50, duration: 1, ease: 'power3.out',
+      scrollTrigger: { scroller: sc, trigger: el, start: 'top 95%' }
+    });
+  });
+
+  ScrollTrigger.refresh();
+}
+
+// ─────────────────────────────────────────────
+// CURSOR
+// ─────────────────────────────────────────────
+function initCursor() {
+  if (isTouch()) return;
+  const dot = document.getElementById('cd'), ring = document.getElementById('cr');
+  let rx = 0, ry = 0, mx = 0, my = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+  document.addEventListener('mousedown', () => document.body.classList.add('ca'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('ca'));
+
+  const hovered = 'a, button, .t-card, .prog-card, .pc, .sch-cls, .nav-cta';
+  document.querySelectorAll(hovered).forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
+
+  (function raf() {
+    rx += (mx - rx) * .11; ry += (my - ry) * .11;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(raf);
+  })();
+}
+
+// ─────────────────────────────────────────────
+// MAGNETIC BUTTONS
+// ─────────────────────────────────────────────
+function initMagnetic() {
+  if (isTouch()) return;
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width  / 2) * .28;
+      const y = (e.clientY - r.top  - r.height / 2) * .28;
+      el.style.transform = `translate(${x}px,${y}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+}
+
+// ─────────────────────────────────────────────
+// NAV TEXT GLITCH
+// ─────────────────────────────────────────────
+function initGlitch() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#%';
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    // Store the original text once, never let it be overwritten
+    const orig = link.textContent.trim();
+    link.dataset.orig = orig;
+    let iv = null;
+
+    link.addEventListener('mouseenter', () => {
+      if (iv) { clearInterval(iv); iv = null; }
+      let n = 0;
+      iv = setInterval(() => {
+        n++;
+        link.textContent = orig.split('').map((c, i) =>
+          i < n ? orig[i] : (c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)])
+        ).join('');
+        if (n >= orig.length) {
+          clearInterval(iv); iv = null;
+          link.textContent = orig;
+        }
+      }, 40);
+    });
+
+    // Always restore on mouseleave — belt AND suspenders
+    link.addEventListener('mouseleave', () => {
+      if (iv) { clearInterval(iv); iv = null; }
+      link.textContent = orig;
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
+// BEFORE / AFTER SLIDER
+// ─────────────────────────────────────────────
+function initBASlider() {
+  const box = document.getElementById('ba-box');
+  const after = document.getElementById('ba-after-img');
+  const div = document.getElementById('ba-div');
+  if (!box) return;
+
+  let dragging = false;
+  const set = x => {
+    const r = box.getBoundingClientRect();
+    const p = Math.max(4, Math.min(96, (x - r.left) / r.width * 100));
+    after.style.clipPath = `inset(0 ${100-p}% 0 0)`;
+    div.style.left = p + '%';
+  };
+
+  div.addEventListener('mousedown', () => dragging = true);
+  document.addEventListener('mouseup', () => dragging = false);
+  document.addEventListener('mousemove', e => { if (dragging) set(e.clientX); });
+  div.addEventListener('touchstart', () => dragging = true, { passive: true });
+  document.addEventListener('touchend', () => dragging = false);
+  document.addEventListener('touchmove', e => { if (dragging) set(e.touches[0].clientX); }, { passive: true });
+}
+
+// ─────────────────────────────────────────────
+// PROGRAMS DRAG SCROLL
+// ─────────────────────────────────────────────
+function initProgDrag() {
+  const track = document.getElementById('prog-track');
+  let down = false, startX, sl;
+  track.addEventListener('mousedown', e => { down = true; startX = e.pageX - track.offsetLeft; sl = track.scrollLeft; track.style.cursor = 'grabbing'; });
+  document.addEventListener('mouseup', () => { down = false; track.style.cursor = 'grab'; });
+  track.addEventListener('mousemove', e => {
+    if (!down) return; e.preventDefault();
+    track.scrollLeft = sl - (e.pageX - track.offsetLeft - startX) * 1.6;
+  });
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  initThree();
+
+  runPreloader(() => {
+    heroEntrance();
+    initScroll();
+    initGSAP();
+    initCursor();
+    initMagnetic();
+    initGlitch();
+    initBASlider();
+    initProgDrag();
+
+    window.addEventListener('load', () => {
+      setTimeout(() => { loco && loco.update(); ScrollTrigger.refresh(); }, 400);
+    });
+  });
+});
+</script>
+</body>
+</html>
